@@ -7,3 +7,11 @@
 //
 
 import Foundation
+import UIKit
+
+class PrototypeHero: UITableViewCell {
+
+
+
+    
+}
