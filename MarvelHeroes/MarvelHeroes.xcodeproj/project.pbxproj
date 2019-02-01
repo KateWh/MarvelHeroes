@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		580BFFC5220365DA00A355EC /* Woman.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 580BFFC4220365DA00A355EC /* Woman.jpg */; };
+		58CC18AA22039B7C000590CE /* GetHeroes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CC18A922039B7C000590CE /* GetHeroes.swift */; };
 		C661CA8A2201E4C700D939DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA892201E4C700D939DB /* AppDelegate.swift */; };
-		C661CA8C2201E4C700D939DB /* LastHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA8B2201E4C700D939DB /* LastHero.swift */; };
+		C661CA8C2201E4C700D939DB /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA8B2201E4C700D939DB /* WebVC.swift */; };
 		C661CA8F2201E4C700D939DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA8D2201E4C700D939DB /* Main.storyboard */; };
 		C661CA912201E4CB00D939DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C661CA902201E4CB00D939DB /* Assets.xcassets */; };
 		C661CA942201E4CB00D939DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA922201E4CB00D939DB /* LaunchScreen.storyboard */; };
@@ -17,9 +19,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		580BFFC4220365DA00A355EC /* Woman.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Woman.jpg; path = ../../../../Desktop/Woman.jpg; sourceTree = "<group>"; };
+		58CC18A922039B7C000590CE /* GetHeroes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetHeroes.swift; sourceTree = "<group>"; };
+		58CC18AC2203A2EA000590CE /* Woman.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Woman.jpg; sourceTree = "<group>"; };
+		58CC18AD2203A30E000590CE /* Woman.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = Woman.jpg; path = ../../../../../Desktop/Woman.jpg; sourceTree = "<group>"; };
 		C661CA862201E4C700D939DB /* MarvelHeroes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarvelHeroes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C661CA892201E4C700D939DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C661CA8B2201E4C700D939DB /* LastHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastHero.swift; sourceTree = "<group>"; };
+		C661CA8B2201E4C700D939DB /* WebVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVC.swift; sourceTree = "<group>"; };
 		C661CA8E2201E4C700D939DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C661CA902201E4CB00D939DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C661CA932201E4CB00D939DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -39,6 +45,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		58CC18AB2203A2DF000590CE /* Support files */ = {
+			isa = PBXGroup;
+			children = (
+				C661CA892201E4C700D939DB /* AppDelegate.swift */,
+				58CC18AD2203A30E000590CE /* Woman.jpg */,
+				C661CA8D2201E4C700D939DB /* Main.storyboard */,
+				C661CA922201E4CB00D939DB /* LaunchScreen.storyboard */,
+				C661CA902201E4CB00D939DB /* Assets.xcassets */,
+				58CC18AC2203A2EA000590CE /* Woman.jpg */,
+			);
+			path = "Support files";
+			sourceTree = "<group>";
+		};
 		C661CA7D2201E4C700D939DB = {
 			isa = PBXGroup;
 			children = (
@@ -58,13 +77,12 @@
 		C661CA882201E4C700D939DB /* MarvelHeroes */ = {
 			isa = PBXGroup;
 			children = (
-				C661CA892201E4C700D939DB /* AppDelegate.swift */,
-				C661CA8B2201E4C700D939DB /* LastHero.swift */,
+				58CC18AB2203A2DF000590CE /* Support files */,
+				580BFFC4220365DA00A355EC /* Woman.jpg */,
+				58CC18A922039B7C000590CE /* GetHeroes.swift */,
 				C661CA9B2201E5E900D939DB /* CollectionHeroes.swift */,
-				C661CA8D2201E4C700D939DB /* Main.storyboard */,
+				C661CA8B2201E4C700D939DB /* WebVC.swift */,
 				C661CA9D2201E76100D939DB /* PrototypeHero.swift */,
-				C661CA902201E4CB00D939DB /* Assets.xcassets */,
-				C661CA922201E4CB00D939DB /* LaunchScreen.storyboard */,
 				C661CA952201E4CB00D939DB /* Info.plist */,
 			);
 			path = MarvelHeroes;
@@ -130,6 +148,7 @@
 			files = (
 				C661CA942201E4CB00D939DB /* LaunchScreen.storyboard in Resources */,
 				C661CA912201E4CB00D939DB /* Assets.xcassets in Resources */,
+				580BFFC5220365DA00A355EC /* Woman.jpg in Resources */,
 				C661CA8F2201E4C700D939DB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,7 +161,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C661CA9C2201E5E900D939DB /* CollectionHeroes.swift in Sources */,
-				C661CA8C2201E4C700D939DB /* LastHero.swift in Sources */,
+				C661CA8C2201E4C700D939DB /* WebVC.swift in Sources */,
+				58CC18AA22039B7C000590CE /* GetHeroes.swift in Sources */,
 				C661CA9E2201E76100D939DB /* PrototypeHero.swift in Sources */,
 				C661CA8A2201E4C700D939DB /* AppDelegate.swift in Sources */,
 			);
@@ -291,14 +311,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GC8SPUUSA6;
+				DEVELOPMENT_TEAM = 45JNFF5WM9;
 				INFOPLIST_FILE = MarvelHeroes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ket.MarvelHeroes;
+				PRODUCT_BUNDLE_IDENTIFIER = vit.MarvelHeroes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -310,14 +330,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GC8SPUUSA6;
+				DEVELOPMENT_TEAM = 45JNFF5WM9;
 				INFOPLIST_FILE = MarvelHeroes/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = ket.MarvelHeroes;
+				PRODUCT_BUNDLE_IDENTIFIER = vit.MarvelHeroes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -11,7 +11,16 @@ import UIKit
 
 class PrototypeHero: UITableViewCell {
 
-
-
+    @IBOutlet weak var nameHero: UILabel!
+    @IBOutlet weak var myImageView: UIImageView!
+    @IBOutlet weak var firstYearAppearsInComics: UILabel!
+    @IBOutlet var cornerRadiusForLabels: [UILabel]!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+//        for label in cornerRadiusForLabels {
+//            label.layer.cornerRadius = 5
+//        }
+    }
     
 }
