@@ -54,7 +54,6 @@ struct Stories: Decodable {
 struct Events: Decodable {
     let available: Int
 }
-
 //-------------------------------------------------
 
 
