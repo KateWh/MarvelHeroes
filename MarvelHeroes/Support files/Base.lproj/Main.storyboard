@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HSy-Zu-K4C">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.30.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="HSy-Zu-K4C">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.19.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -281,13 +281,42 @@
                     <view key="view" contentMode="scaleToFill" id="sDi-0y-tMO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQM-5c-2sv">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="IFV-od-3rj">
+                                <rect key="frame" x="0.0" y="64" width="375" height="2"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="Vjg-Mc-T09"/>
+                                </constraints>
+                            </progressView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="IFV-od-3rj" firstAttribute="top" secondItem="WvQ-qP-3td" secondAttribute="top" id="1Hy-Ua-j2M"/>
+                            <constraint firstItem="WvQ-qP-3td" firstAttribute="bottom" secondItem="ZQM-5c-2sv" secondAttribute="bottom" id="I7O-MJ-IQj"/>
+                            <constraint firstItem="IFV-od-3rj" firstAttribute="leading" secondItem="WvQ-qP-3td" secondAttribute="leading" id="TEC-aJ-7aS"/>
+                            <constraint firstItem="WvQ-qP-3td" firstAttribute="top" secondItem="ZQM-5c-2sv" secondAttribute="top" constant="64" id="TKp-Yo-bOs"/>
+                            <constraint firstItem="WvQ-qP-3td" firstAttribute="trailing" secondItem="IFV-od-3rj" secondAttribute="trailing" id="WnC-X4-OaA"/>
+                            <constraint firstItem="WvQ-qP-3td" firstAttribute="trailing" secondItem="ZQM-5c-2sv" secondAttribute="trailing" id="sYE-Ga-Got"/>
+                            <constraint firstItem="ZQM-5c-2sv" firstAttribute="leading" secondItem="WvQ-qP-3td" secondAttribute="leading" id="vts-d1-cOU"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="WvQ-qP-3td"/>
                     </view>
+                    <connections>
+                        <outlet property="progressViewHero" destination="IFV-od-3rj" id="7gP-WA-VKp"/>
+                        <outlet property="webViewHero" destination="ZQM-5c-2sv" id="SWk-ia-yh1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Ab-w1-Vaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="922" y="81"/>
+            <point key="canvasLocation" x="920.79999999999995" y="80.50974512743629"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CDY-RA-4O2">
