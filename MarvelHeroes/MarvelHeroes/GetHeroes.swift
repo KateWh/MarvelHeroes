@@ -22,6 +22,9 @@ struct Results: Decodable {
     let name: String
     let thumbnail: ImageLink
     let comics: Comics
+    let series: Series
+    let stories: Stories
+    let events: Events
     let urls: [HeroInfo]
 }
 
@@ -41,6 +44,15 @@ struct ImageLink: Decodable {
 struct HeroInfo: Decodable {
     let type: String
     let url: String
+}
+struct Series: Decodable {
+    let available: Int
+}
+struct Stories: Decodable {
+    let available: Int
+}
+struct Events: Decodable {
+    let available: Int
 }
 
 //-------------------------------------------------
