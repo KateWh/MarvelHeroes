@@ -11,20 +11,23 @@ import WebKit
 
 class WebVC: UIViewController {
 
-    @IBOutlet weak var webViewHero: WKWebView!
-    @IBOutlet weak var progressViewHero: UIProgressView!
-    var detailLink = URL(string: "")
-
+    var newsLink: URL?
+    @IBOutlet weak var webView: WKWebView!
+    @IBOutlet weak var progressBar: UIProgressView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        webViewHero.load(URLRequest(url: detailLink!))
-        webViewHero.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        webView.load(URLRequest(url: newsLink!))
+        progressBar.progress = 0.0
+        webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        progressViewHero.setProgress(Float(webViewHero.estimatedProgress), animated: true)
-        progressViewHero.isHidden = webViewHero.estimatedProgress == 1
-
+        print("-->", Float(webView.estimatedProgress))
+        progressBar.setProgress(Float(webView.estimatedProgress), animated: true)
+        progressBar.isHidden = webView.estimatedProgress == 1
     }
 
 }

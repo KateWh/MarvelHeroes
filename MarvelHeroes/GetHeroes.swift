@@ -22,6 +22,9 @@ struct Results: Decodable {
     let name: String
     let thumbnail: ImageLink
     let comics: Comics
+    let series: Series
+    let stories: Stories
+    let events: Events
     let urls: [HeroInfo]
 }
 
@@ -42,15 +45,29 @@ struct HeroInfo: Decodable {
     let type: String
     let url: String
 }
-
+struct Series: Decodable {
+    let available: Int
+}
+struct Stories: Decodable {
+    let available: Int
+}
+struct Events: Decodable {
+    let available: Int
+}
 //-------------------------------------------------
 
 
 class GetHeroes {
     var allAboutHero: [Results] = []
+    var offset = 0
     
     func getHeroes(withLimit limit: Int, completionHandler: @escaping (Error?) -> Void) {
-        guard let url = URL(string: "https://gateway.marvel.com:443/v1/public/characters?limit=" + String(limit) + "&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a") else { return }
+        guard let url = URL(string: "https://gateway.marvel.com:443/v1/public/characters?limit=" + String(limit) + "&offset=" + String(offset) + "&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a") else { return }
+        offset += limit
+        if offset > 1490 {
+            offset = 0
+        }
+        
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data, error == nil else { return }
             
@@ -62,7 +79,7 @@ class GetHeroes {
             } catch {
                 print(error)
             }
-            }.resume()
+        }.resume()
     }
     
 }

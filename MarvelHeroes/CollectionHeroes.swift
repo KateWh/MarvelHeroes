@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CollectionHeroes: UITableViewController {
     let marvelHeroes = GetHeroes()
+    let hero = PrototypeHero()
+    var allHeroesData: [Results] = []
 
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
@@ -21,10 +24,11 @@ class CollectionHeroes: UITableViewController {
         updateData()
     }
     
-    
+    // get retrieve heroes data
     func updateData() {
-        marvelHeroes.getHeroes(withLimit: 5) { (error) in
+        marvelHeroes.getHeroes(withLimit: 12) { (error) in
             if error == nil {
+                self.allHeroesData += self.marvelHeroes.allAboutHero
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -34,8 +38,29 @@ class CollectionHeroes: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var detailLink = ""
+        var wikiLink = ""
+        // find "wiki" key among data
+        for url in allHeroesData[indexPath.row].urls {
+            if url.type == "wiki" {
+                wikiLink = url.url
+            } else {
+                detailLink = url.url
+            }
+        }
+        // go to "wiki" link or "detail" link
+        if wikiLink != "" {
+            wikiLink.insert("s", at: wikiLink.index(wikiLink.startIndex, offsetBy: 4))
+            self.performSegue(withIdentifier: "goToHeroInfo", sender: URL(string: wikiLink))
+        } else {
+            detailLink.insert("s", at: detailLink.index(detailLink.startIndex, offsetBy: 4))
+            self.performSegue(withIdentifier: "goToHeroInfo", sender: URL(string: detailLink))
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroes.allAboutHero.count
+        return allHeroesData.count
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
@@ -43,38 +68,18 @@ class CollectionHeroes: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PrototypeHero
-        cell.loadHero(about: marvelHeroes.allAboutHero[indexPath.row])
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let alertLinks = UIAlertController(title: "Which way do you choose?" , message: "", preferredStyle: UIAlertController.Style.alert)
-
-        alertLinks.addAction(UIAlertAction(
-            title: "Wiki", style: .default, handler: { action in self.goToWebVC(for: "wiki", and: indexPath.row)}))
-
-        alertLinks.addAction(UIAlertAction(title: "Detail", style: .default, handler: { action in self.goToWebVC(for: "detail", and: indexPath.row) }))
-
-        alertLinks.addAction(UIAlertAction(title: "Comic link", style: .default, handler: { action in self.goToWebVC(for: "comiclink", and: indexPath.row) }))
-        self.present(alertLinks, animated: true)
-
-        alertLinks.addAction(UIAlertAction(title: "Cancel", style: .default , handler: nil))
-    }
-
-    func goToWebVC(for key: String, and hero: Int) {
-        var detailLink = URL(string: "")
-        for value in marvelHeroes.allAboutHero[hero].urls.enumerated() {
-            if key == value.element.type {
-               let ATSbandit = value.element.url
-                detailLink = URL(string: "https" + ATSbandit.dropFirst(4))
-            }
+        cell.updateCell(withResults: allHeroesData[indexPath.row])
+        // pagination
+        if (tableView.indexPathsForVisibleRows! != []) && (tableView.indexPathsForVisibleRows![0][1] + 4) == allHeroesData.count {
+            updateData()
         }
-        self.performSegue(withIdentifier: "goToHero", sender: detailLink)
+        
+        return cell
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let WebVC = segue.destination as? WebVC
-        WebVC?.detailLink = sender as? URL
+        WebVC?.newsLink = sender as? URL
     }
-
+    
 }
