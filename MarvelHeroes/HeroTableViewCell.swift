@@ -9,12 +9,12 @@
 import Foundation
 import UIKit
 
-class PrototypeHero: UITableViewCell {
+class HeroTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var nameHero: UILabel!
-    @IBOutlet weak var myImageView: UIImageView!
-    @IBOutlet weak var firstYearAppearsInComics: UILabel!
-    @IBOutlet var labelsWithHeroData: [UILabel]!
+    @IBOutlet weak var heroNameLabel: UILabel!
+    @IBOutlet weak var heroImageLabel: UIImageView!
+    @IBOutlet weak var firstYearAppearsInComicsLabel: UILabel!
+    @IBOutlet var detailsAboutHeroLabels: [UILabel]!
     @IBOutlet weak var comicsLabel: UILabel!
     @IBOutlet weak var seriesLabel: UILabel!
     @IBOutlet weak var storiesLabel: UILabel!
@@ -22,7 +22,8 @@ class PrototypeHero: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        for label in labelsWithHeroData {
+        // set corner radius to details labels
+        for label in detailsAboutHeroLabels {
             label.layer.cornerRadius = 5
             label.layer.masksToBounds = true
         }
@@ -41,26 +42,25 @@ class PrototypeHero: UITableViewCell {
         }
     }
     
-    // find the greatest date when the hero first appeared
-    func findGreatestDate(from results: Results) -> String {
+    // find the earliest date when the hero first appeared
+    func findEarliestDate(from results: Hero) -> String {
         var dateArray = [String]()
-        for item in results.comics.items {
-            let comicsDateOfOneHero = matches(for: "\\([0-9]{4}\\)", in: item.name)
-            if comicsDateOfOneHero != [] {
-                dateArray.append(comicsDateOfOneHero[0])
+        for comics in results.comics.items {
+            let comicsDate = matches(for: "\\([0-9]{4}\\)", in: comics.name)
+            if comicsDate != [] {
+                dateArray.append(comicsDate[0])
             }
         }
         return dateArray.sorted(by: < ).first ?? "(????)"
     }
 
     // assembled the cell
-    func updateCell(withResults results: Results) {
-        var imageLink = results.thumbnail.path + "." + results.thumbnail.extension
-        // insert "s" for "https", because source link looks like "http", and iOS is angry!
-        imageLink.insert("s", at: imageLink.index(imageLink.startIndex, offsetBy: 4))
-        self.myImageView.sd_setImage(with: URL(string: imageLink), completed: nil)
-        self.nameHero.text = String(results.name)
-        self.firstYearAppearsInComics.text = findGreatestDate(from: results)
+    func updateCell(withResults results: Hero) {
+        // replase "http" with "https", because source link looks like "http", and iOS is angry 😡!
+        let imageLink = "https" + results.thumbnail.path.dropFirst(4) + "." + results.thumbnail.extension
+        self.heroImageLabel.sd_setImage(with: URL(string: imageLink), completed: nil)
+        self.heroNameLabel.text = String(results.name)
+        self.firstYearAppearsInComicsLabel.text = findEarliestDate(from: results)
         self.comicsLabel.text = String(results.comics.available)
         self.seriesLabel.text = String(results.series.available)
         self.storiesLabel.text = String(results.stories.available)

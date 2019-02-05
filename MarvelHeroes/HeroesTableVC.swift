@@ -9,10 +9,9 @@
 import UIKit
 import SDWebImage
 
-class CollectionHeroes: UITableViewController {
+class HeroesTableVC: UITableViewController {
     let marvelHeroes = GetHeroes()
-    let hero = PrototypeHero()
-    var allHeroesData: [Results] = []
+    var allHeroesData: [Hero] = []
 
 
     override func viewDidLoad() {
@@ -67,9 +66,9 @@ class CollectionHeroes: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PrototypeHero
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
         cell.updateCell(withResults: allHeroesData[indexPath.row])
-        // pagination
+        // pagination cells
         if (tableView.indexPathsForVisibleRows! != []) && (tableView.indexPathsForVisibleRows![0][1] + 4) == allHeroesData.count {
             updateData()
         }
@@ -79,7 +78,7 @@ class CollectionHeroes: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let WebVC = segue.destination as? WebVC
-        WebVC?.newsLink = sender as? URL
+        WebVC?.heroLink = sender as? URL
     }
     
 }

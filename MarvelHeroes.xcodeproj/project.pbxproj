@@ -14,8 +14,9 @@
 		C661CA8F2201E4C700D939DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA8D2201E4C700D939DB /* Main.storyboard */; };
 		C661CA912201E4CB00D939DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C661CA902201E4CB00D939DB /* Assets.xcassets */; };
 		C661CA942201E4CB00D939DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA922201E4CB00D939DB /* LaunchScreen.storyboard */; };
-		C661CA9C2201E5E900D939DB /* CollectionHeroes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA9B2201E5E900D939DB /* CollectionHeroes.swift */; };
-		C661CA9E2201E76100D939DB /* PrototypeHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA9D2201E76100D939DB /* PrototypeHero.swift */; };
+		C661CA9C2201E5E900D939DB /* HeroesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA9B2201E5E900D939DB /* HeroesTableVC.swift */; };
+		C661CA9E2201E76100D939DB /* HeroTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C661CA9D2201E76100D939DB /* HeroTableViewCell.swift */; };
+		C6DC1247220A486B00C1A084 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DC1246220A486B00C1A084 /* DataModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +31,9 @@
 		C661CA902201E4CB00D939DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C661CA932201E4CB00D939DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C661CA952201E4CB00D939DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C661CA9B2201E5E900D939DB /* CollectionHeroes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeroes.swift; sourceTree = "<group>"; };
-		C661CA9D2201E76100D939DB /* PrototypeHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeHero.swift; sourceTree = "<group>"; };
+		C661CA9B2201E5E900D939DB /* HeroesTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroesTableVC.swift; sourceTree = "<group>"; };
+		C661CA9D2201E76100D939DB /* HeroTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroTableViewCell.swift; sourceTree = "<group>"; };
+		C6DC1246220A486B00C1A084 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		EB850EFC1B2BDD9B7C93378E /* Pods-MarvelHeroes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarvelHeroes.release.xcconfig"; path = "Pods/Target Support Files/Pods-MarvelHeroes/Pods-MarvelHeroes.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,10 +100,11 @@
 			isa = PBXGroup;
 			children = (
 				58CC18AB2203A2DF000590CE /* Support files */,
+				C6DC1246220A486B00C1A084 /* DataModel.swift */,
 				58CC18A922039B7C000590CE /* GetHeroes.swift */,
-				C661CA9B2201E5E900D939DB /* CollectionHeroes.swift */,
+				C661CA9B2201E5E900D939DB /* HeroesTableVC.swift */,
 				C661CA8B2201E4C700D939DB /* WebVC.swift */,
-				C661CA9D2201E76100D939DB /* PrototypeHero.swift */,
+				C661CA9D2201E76100D939DB /* HeroTableViewCell.swift */,
 				C661CA952201E4CB00D939DB /* Info.plist */,
 			);
 			path = MarvelHeroes;
@@ -207,12 +210,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MarvelHeroes/Pods-MarvelHeroes-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,11 +232,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C661CA9C2201E5E900D939DB /* CollectionHeroes.swift in Sources */,
+				C661CA9C2201E5E900D939DB /* HeroesTableVC.swift in Sources */,
 				C661CA8C2201E4C700D939DB /* WebVC.swift in Sources */,
 				58CC18AA22039B7C000590CE /* GetHeroes.swift in Sources */,
-				C661CA9E2201E76100D939DB /* PrototypeHero.swift in Sources */,
+				C661CA9E2201E76100D939DB /* HeroTableViewCell.swift in Sources */,
 				C661CA8A2201E4C700D939DB /* AppDelegate.swift in Sources */,
+				C6DC1247220A486B00C1A084 /* DataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ import WebKit
 
 class WebVC: UIViewController {
 
-    var newsLink: URL?
+    var heroLink: URL?
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var progressBar: UIProgressView!
     
@@ -19,7 +19,9 @@ class WebVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-        webView.load(URLRequest(url: newsLink!))
+        // loading hero data
+        webView.load(URLRequest(url: heroLink!))
+        // set progress line to zero
         progressBar.progress = 0.0
         webView.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
     }
