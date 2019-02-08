@@ -100,10 +100,10 @@
 		C661CA882201E4C700D939DB /* MarvelHeroes */ = {
 			isa = PBXGroup;
 			children = (
-				C6DC124A220CD13300C1A084 /* ViewModel layer */,
-				C6DC1248220CD09A00C1A084 /* REST API layer */,
-				C6DC1249220CD0CF00C1A084 /* Communicator layer */,
-				C6DC124B220CD15C00C1A084 /* UI layer */,
+				FC637F47220E017100B2F5DB /* Communicator layer */,
+				FC637F46220E017100B2F5DB /* REST API layer */,
+				FC637F44220E017100B2F5DB /* UI layer */,
+				FC637F45220E017100B2F5DB /* ViewModel layer  */,
 				C6DC1246220A486B00C1A084 /* DataModel.swift */,
 				C6DC124C220CD32C00C1A084 /* HeroesViewModel.swift */,
 				C661CA9B2201E5E900D939DB /* HeroesTableVC.swift */,
@@ -114,32 +114,32 @@
 			path = MarvelHeroes;
 			sourceTree = "<group>";
 		};
-		C6DC1248220CD09A00C1A084 /* REST API layer */ = {
+		FC637F44220E017100B2F5DB /* UI layer */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "UI layer";
+			sourceTree = "<group>";
+		};
+		FC637F45220E017100B2F5DB /* ViewModel layer  */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "ViewModel layer ";
+			sourceTree = "<group>";
+		};
+		FC637F46220E017100B2F5DB /* REST API layer */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = "REST API layer";
 			sourceTree = "<group>";
 		};
-		C6DC1249220CD0CF00C1A084 /* Communicator layer */ = {
+		FC637F47220E017100B2F5DB /* Communicator layer */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = "Communicator layer";
-			sourceTree = "<group>";
-		};
-		C6DC124A220CD13300C1A084 /* ViewModel layer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "ViewModel layer";
-			sourceTree = "<group>";
-		};
-		C6DC124B220CD15C00C1A084 /* UI layer */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "UI layer";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
