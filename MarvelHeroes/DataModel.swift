@@ -8,11 +8,14 @@
 
 import Foundation
 
-struct ComicsComicId: Decodable {
-    let data: HeroData
+struct CharacterDataWrapper: Decodable {
+    let data: CharacterDataContainer
 }
 
-struct HeroData: Decodable {
+struct CharacterDataContainer: Decodable {
+    let offset: Int
+    let limit: Int
+    let total: Int
     let results: [Hero]
 }
 
