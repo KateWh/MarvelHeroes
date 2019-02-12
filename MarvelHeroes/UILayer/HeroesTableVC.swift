@@ -12,29 +12,27 @@ import SDWebImage
 class HeroesTableVC: UITableViewController {
     let marvelHeroes = HeroesViewModel()
     var allHeroesData: [Hero] = []
-    var characterDataWrapper: [CharacterDataWrapper]? = nil
-
+    var charatcerDataWrapper: [CharacterDataWrapper]? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
         updateData()
+        tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
     }
-
+    
     // get retrieve heroes data
     func updateData() {
-        let offset = characterDataWrapper?[0].data.offset
+        let offset = charatcerDataWrapper?[0].data.offset
         marvelHeroes.getHeroes(withLimit: 12, withOffset: offset ?? 0) { (result) in
             switch result {
             case .success(let allAboutHero):
                 self.allHeroesData += allAboutHero.data.results
-                self.characterDataWrapper = [allAboutHero] as [CharacterDataWrapper]?
+                self.charatcerDataWrapper = [allAboutHero] as [CharacterDataWrapper]?
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             case .failure(let error):
                 print(error)
-
             }
         }
     }
@@ -71,11 +69,9 @@ class HeroesTableVC: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
         cell.updateCell(withResults: allHeroesData[indexPath.row])
         // pagination cells
-        print(tableView.indexPathsForVisibleRows![0][1] + 4)
-        if (tableView.indexPathsForVisibleRows! != []) && (tableView.indexPathsForVisibleRows![0][1] + 4) == allHeroesData.count {
+        if (tableView.indexPathsForVisibleRows![2][1] + 2) == allHeroesData.count {
             updateData()
         }
-        
         return cell
     }
 
