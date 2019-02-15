@@ -11,37 +11,25 @@ import SDWebImage
 
 class HeroesTableVC: UITableViewController {
     let marvelHeroes = HeroesViewModel()
-    var allHeroesData: [Hero] = []
-    var charatcerDataWrapper: [CharacterDataWrapper]? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateData()
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-    }
-    
-    // get retrieve heroes data
-    func updateData() {
-        let offset = charatcerDataWrapper?[0].data.offset
-        marvelHeroes.getHeroes(withLimit: 12, withOffset: offset ?? 0) { (result) in
-            switch result {
-            case .success(let allAboutHero):
-                self.allHeroesData += allAboutHero.data.results
-                self.charatcerDataWrapper = [allAboutHero] as [CharacterDataWrapper]?
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            case .failure(let error):
-                print(error)
+        marvelHeroes.updateData { (bool) in
+            if bool {
+                self.tableView.reloadData()
             }
         }
     }
+    
+    // get retrieve heroes data
+   
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var detailLink = ""
         var wikiLink = ""
         // find "wiki" key among data
-        for url in allHeroesData[indexPath.row].urls {
+        for url in marvelHeroes.allHeroesData[indexPath.row].urls {
             if url.type == "wiki" {
                 wikiLink = url.url
             } else {
@@ -59,7 +47,7 @@ class HeroesTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allHeroesData.count
+        return marvelHeroes.allHeroesData.count
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
@@ -67,10 +55,14 @@ class HeroesTableVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
-        cell.updateCell(withResults: allHeroesData[indexPath.row])
+        cell.updateCell(withResults: marvelHeroes.allHeroesData[indexPath.row])
         // pagination cells
-        if (tableView.indexPathsForVisibleRows![2][1] + 2) == allHeroesData.count {
-            updateData()
+        if false {
+            marvelHeroes.updateData { (bool) in
+                if bool {
+                    tableView.reloadData()
+                }
+            }
         }
         return cell
     }

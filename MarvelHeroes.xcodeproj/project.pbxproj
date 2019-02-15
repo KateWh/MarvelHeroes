@@ -12,6 +12,7 @@
 		C661CA8F2201E4C700D939DB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA8D2201E4C700D939DB /* Main.storyboard */; };
 		C661CA912201E4CB00D939DB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C661CA902201E4CB00D939DB /* Assets.xcassets */; };
 		C661CA942201E4CB00D939DB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C661CA922201E4CB00D939DB /* LaunchScreen.storyboard */; };
+		C6F3499D2214B50400549296 /* CharactersCommunicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F3499C2214B50400549296 /* CharactersCommunicator.swift */; };
 		FCCFB0152214A87E001013DE /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCFB00C2214A87D001013DE /* DataModel.swift */; };
 		FCCFB0162214A87E001013DE /* HeroesTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCFB00E2214A87D001013DE /* HeroesTableVC.swift */; };
 		FCCFB0172214A87E001013DE /* WebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCCFB00F2214A87E001013DE /* WebVC.swift */; };
@@ -30,6 +31,7 @@
 		C661CA902201E4CB00D939DB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C661CA932201E4CB00D939DB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C661CA952201E4CB00D939DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C6F3499C2214B50400549296 /* CharactersCommunicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersCommunicator.swift; sourceTree = "<group>"; };
 		EB850EFC1B2BDD9B7C93378E /* Pods-MarvelHeroes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarvelHeroes.release.xcconfig"; path = "Pods/Target Support Files/Pods-MarvelHeroes/Pods-MarvelHeroes.release.xcconfig"; sourceTree = "<group>"; };
 		FCCFB00C2214A87D001013DE /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
 		FCCFB00E2214A87D001013DE /* HeroesTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeroesTableVC.swift; sourceTree = "<group>"; };
@@ -102,7 +104,7 @@
 		C661CA882201E4C700D939DB /* MarvelHeroes */ = {
 			isa = PBXGroup;
 			children = (
-				FCCFB01B2214ACD9001013DE /* Communicators */,
+				C6F3499B2214B4E000549296 /* Communicators */,
 				FCCFB00B2214A87D001013DE /* DataModel */,
 				FCCFB0112214A87E001013DE /* RESTAPILayer */,
 				FCCFB00D2214A87D001013DE /* UILayer */,
@@ -110,6 +112,14 @@
 				58CC18AB2203A2DF000590CE /* Support files */,
 			);
 			path = MarvelHeroes;
+			sourceTree = "<group>";
+		};
+		C6F3499B2214B4E000549296 /* Communicators */ = {
+			isa = PBXGroup;
+			children = (
+				C6F3499C2214B50400549296 /* CharactersCommunicator.swift */,
+			);
+			path = Communicators;
 			sourceTree = "<group>";
 		};
 		FCCFB00B2214A87D001013DE /* DataModel */ = {
@@ -144,13 +154,6 @@
 				FCCFB0142214A87E001013DE /* HeroesViewModel.swift */,
 			);
 			path = ViewModelLayer;
-			sourceTree = "<group>";
-		};
-		FCCFB01B2214ACD9001013DE /* Communicators */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Communicators;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,6 +278,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6F3499D2214B50400549296 /* CharactersCommunicator.swift in Sources */,
 				C661CA8A2201E4C700D939DB /* AppDelegate.swift in Sources */,
 				FCCFB0172214A87E001013DE /* WebVC.swift in Sources */,
 				FCCFB0162214A87E001013DE /* HeroesTableVC.swift in Sources */,
@@ -429,14 +433,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 45JNFF5WM9;
+				DEVELOPMENT_TEAM = GC8SPUUSA6;
 				INFOPLIST_FILE = "$(SRCROOT)/MarvelHeroes/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = vit.MarvelHeroes;
+				PRODUCT_BUNDLE_IDENTIFIER = ket.MarvelHeroes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -449,14 +453,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 45JNFF5WM9;
+				DEVELOPMENT_TEAM = GC8SPUUSA6;
 				INFOPLIST_FILE = "$(SRCROOT)/MarvelHeroes/Support files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = vit.MarvelHeroes;
+				PRODUCT_BUNDLE_IDENTIFIER = ket.MarvelHeroes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

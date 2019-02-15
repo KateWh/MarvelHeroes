@@ -9,24 +9,27 @@
 //
 
 import Foundation
-import Alamofire
 
 class HeroesViewModel {
 
-    func getHeroes(withLimit limit: Int, withOffset offset: Int, completionHandler: @escaping (Result<CharacterDataWrapper>) -> Void) {
-        Alamofire.request(Router.getHeroes(withLimit: limit, withOffset: offset)).responseJSON { response in
-            if let data = response.data {
-                do {
-                    let decoder = JSONDecoder()
-                    let receivedData = try decoder.decode(CharacterDataWrapper.self, from: data)
-                    completionHandler(.success(receivedData))
-                } catch {
-                    print(error)
-                    completionHandler(.failure(error))
-                }
+    var allHeroesData: [Hero] = []
+    var limit = 0
+    var offset = 0
+
+    func updateData(complitionHandler: @escaping (Bool) -> Void) {
+        CharatersCommunicator.getHeroes(withLimit: 12, withOffset: offset  ) { (result) in
+            switch result {
+            case .success(let allAboutHero):
+                self.allHeroesData += allAboutHero.data.results
+                self.limit = allAboutHero.data.limit
+                self.offset = allAboutHero.data.offset
+                complitionHandler(true)
+            case .failure(let error):
+                print(error)
+                complitionHandler(false)
             }
         }
-
     }
-    
+
 }
+
