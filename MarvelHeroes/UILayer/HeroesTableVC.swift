@@ -15,6 +15,10 @@ class HeroesTableVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        
+        #warning("Implement pull down to reload feature to refresh data")
+        //tableView.refreshControl = UIRefreshControl()
+        
         marvelHeroesViewModel.updateData { (bool) in
             if bool {
                 self.tableView.reloadData()
@@ -47,6 +51,12 @@ class HeroesTableVC: UITableViewController {
             }
         }
         return cell
+    }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        #warning("Try to implement loading next portion of data here")
+        
+        print(scrollView.contentSize.height)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

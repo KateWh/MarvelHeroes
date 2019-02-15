@@ -17,6 +17,7 @@ class HeroesViewModel {
     var offset = 0
     
     // get heroes data
+    #warning("Do not return just Bool, return result or error to have ability handle this error in ViewController")
     func updateData(complitionHandler: @escaping (Bool) -> Void) {
         CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
             switch result {
