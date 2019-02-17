@@ -11,16 +11,22 @@ import SDWebImage
 
 class HeroesTableVC: UITableViewController {
     let marvelHeroesViewModel = HeroesViewModel()
-
+    var spinner = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        // create spinner to refresh footer animation
+        spinner = UIActivityIndicatorView(style: .whiteLarge)
+        spinner.stopAnimating()
+        spinner.hidesWhenStopped = true
+        spinner.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60)
+        spinner.color = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+        tableView.tableFooterView = spinner
+        
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        
-        #warning("Implement pull down to reload feature to refresh data")
-        //tableView.refreshControl = UIRefreshControl()
-        
-        marvelHeroesViewModel.updateData { (bool) in
-            if bool {
+
+        marvelHeroesViewModel.updateData { (error) in
+            if error == nil {
                 self.tableView.reloadData()
             }
         }
@@ -43,20 +49,29 @@ class HeroesTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
         cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
-        // pagination cells
-        if (tableView.indexPathsForVisibleRows![2][1] + 2) == marvelHeroesViewModel.allHeroesData.count {
-            marvelHeroesViewModel.updateData { (bool) in
-                guard bool else { return }
+        
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        return footerView
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+       return 40
+    }
+    
+    // pagination cells
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if !(indexPath.row + 1 < marvelHeroesViewModel.allHeroesData.count) {
+            spinner.startAnimating()
+            // reload data
+            marvelHeroesViewModel.updateData { (error) in
+                guard error == nil else { return }
                 tableView.reloadData()
             }
         }
-        return cell
-    }
-    
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        #warning("Try to implement loading next portion of data here")
-        
-        print(scrollView.contentSize.height)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

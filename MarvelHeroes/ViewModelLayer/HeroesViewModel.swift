@@ -17,18 +17,17 @@ class HeroesViewModel {
     var offset = 0
     
     // get heroes data
-    #warning("Do not return just Bool, return result or error to have ability handle this error in ViewController")
-    func updateData(complitionHandler: @escaping (Bool) -> Void) {
+    func updateData(complitionHandler: @escaping (Error?) -> Void) {
         CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
             switch result {
             case .success(let allAboutHero):
                 self.allHeroesData += allAboutHero.data.results
                 self.limit = allAboutHero.data.limit
                 self.offset = allAboutHero.data.offset + allAboutHero.data.limit
-                complitionHandler(true)
+                complitionHandler(result.error)
             case .failure(let error):
                 print(error)
-                complitionHandler(false)
+                complitionHandler(result.error)
             }
         }
     }
