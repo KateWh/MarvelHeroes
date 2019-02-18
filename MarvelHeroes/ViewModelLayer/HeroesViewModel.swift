@@ -37,7 +37,8 @@ class HeroesViewModel {
     }
 
     func addPaginationData() {
-        self.allHeroesData += self.paginationData
+        self.paginationData += self.allHeroesData
+        self.allHeroesData = self.paginationData
     }
 
     // get link with hero info

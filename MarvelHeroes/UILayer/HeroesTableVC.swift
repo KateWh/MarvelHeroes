@@ -13,20 +13,27 @@ class HeroesTableVC: UITableViewController {
     let marvelHeroesViewModel = HeroesViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // create spinner to refresh footer animation
         createSpiner()
-        
+        // set color to separator lines between cells
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        
+        // call get marvel heroes data
         marvelHeroesViewModel.updateData { (error) in
             if error == nil {
                 self.tableView.reloadData()
             }
         }
+        
+        // call pull-to-refresh
         addRefreshControl()
     }
 
+    // pagination spiner func 
     func createSpiner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
@@ -36,8 +43,10 @@ class HeroesTableVC: UITableViewController {
         tableView.tableFooterView = spinner
     }
 
+    // pull-to-refresh func
     func addRefreshControl() {
         let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
         refreshControl.addTarget(self, action: #selector(reloadData), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
     }
@@ -45,16 +54,16 @@ class HeroesTableVC: UITableViewController {
     @objc func reloadData() {
         marvelHeroesViewModel.limit = 20
         marvelHeroesViewModel.offset = 0
+        
         marvelHeroesViewModel.updateData { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                let alert = UIAlertController(title: "Attention!", message: error.debugDescription, preferredStyle: .alert )
-                let alertAction = UIAlertAction(title: "Understand ;ь", style: .default, handler: nil)
+                let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
+                let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
                 alert.addAction(alertAction)
-                alert.view.backgroundColor = UIColor(red: 250 , green: 100, blue: 150, alpha: 1.0)
-                alert.view.tintColor = UIColor(red: 250, green: 100, blue: 150, alpha: 1.0)
-                alert.view.layer.cornerRadius = 15
+                alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+                alert.view.layer.cornerRadius = 10
                 self.present(alert, animated: true, completion: nil)
                 self.tableView.reloadData()
             }
