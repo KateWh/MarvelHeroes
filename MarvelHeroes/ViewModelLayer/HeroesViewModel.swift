@@ -11,7 +11,7 @@
 import Foundation
 
 class HeroesViewModel {
-
+    var paginationData: [Hero] = []
     var allHeroesData: [Hero] = []
     var limit = 0
     var offset = 0
@@ -21,7 +21,7 @@ class HeroesViewModel {
         CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
             switch result {
             case .success(let allAboutHero):
-                self.allHeroesData += allAboutHero.data.results
+                self.allHeroesData = allAboutHero.data.results
                 self.limit = allAboutHero.data.limit
                 self.offset = allAboutHero.data.offset + allAboutHero.data.limit
                 complitionHandler(result.error)
@@ -30,6 +30,14 @@ class HeroesViewModel {
                 complitionHandler(result.error)
             }
         }
+    }
+    
+    func  prepareToPagination() {
+        paginationData = allHeroesData
+    }
+
+    func addPaginationData() {
+        self.allHeroesData += self.paginationData
     }
 
     // get link with hero info
