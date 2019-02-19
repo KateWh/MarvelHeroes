@@ -11,6 +11,7 @@
 import Foundation
 
 class HeroesViewModel {
+    #warning ("Try to get rid this paginationData array and simplify business logic")
     var paginationData: [Hero] = []
     var allHeroesData: [Hero] = []
     var limit = 0
@@ -31,7 +32,7 @@ class HeroesViewModel {
             }
         }
     }
-    
+    #warning ("Think how you can avoid using of these two functions")
     func  prepareToPagination() {
         paginationData = allHeroesData
     }

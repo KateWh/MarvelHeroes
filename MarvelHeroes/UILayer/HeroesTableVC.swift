@@ -24,6 +24,7 @@ class HeroesTableVC: UITableViewController {
         
         // call get marvel heroes data
         marvelHeroesViewModel.updateData { (error) in
+            #warning ("Error message not handling here. Alert View should be shown.")
             if error == nil {
                 self.tableView.reloadData()
             }
@@ -52,6 +53,7 @@ class HeroesTableVC: UITableViewController {
     }
 
     @objc func reloadData() {
+        #warning ("Try to move all business logic regarding data refreshing into MarvelHeroesViewModel")
         marvelHeroesViewModel.limit = 20
         marvelHeroesViewModel.offset = 0
         
@@ -101,6 +103,7 @@ class HeroesTableVC: UITableViewController {
             // reload data
             self.marvelHeroesViewModel.prepareToPagination()
             marvelHeroesViewModel.updateData { (error) in
+                #warning ("Error message not handling here. Alert View should be shown.")
                 guard error == nil else { return }
                 self.marvelHeroesViewModel.addPaginationData()
                 self.paginationFlag = true
