@@ -13,20 +13,23 @@ class HeroesTableVC: UITableViewController {
     let marvelHeroesViewModel = HeroesViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-    
+
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         // create spinner to refresh footer animation
         createSpiner()
+
         // set color to separator lines between cells
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        
+
         // call get marvel heroes data
-        marvelHeroesViewModel.updateData { (error) in
-            #warning ("Error message not handling here. Alert View should be shown.")
+        marvelHeroesViewModel.paginationData { (error) in
             if error == nil {
                 self.tableView.reloadData()
+            } else {
+                self.alertHandler()
             }
         }
         
@@ -53,24 +56,24 @@ class HeroesTableVC: UITableViewController {
     }
 
     @objc func reloadData() {
-        #warning ("Try to move all business logic regarding data refreshing into MarvelHeroesViewModel")
-        marvelHeroesViewModel.limit = 20
-        marvelHeroesViewModel.offset = 0
-        
         marvelHeroesViewModel.updateData { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
-                let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
-                alert.addAction(alertAction)
-                alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-                alert.view.layer.cornerRadius = 10
-                self.present(alert, animated: true, completion: nil)
+                self.alertHandler()
                 self.tableView.reloadData()
             }
             self.refreshControl?.endRefreshing()
         }
+    }
+
+    func alertHandler() {
+        let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
+        alert.addAction(alertAction)
+        alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        alert.view.layer.cornerRadius = 10
+        self.present(alert, animated: true, completion: nil)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -97,21 +100,20 @@ class HeroesTableVC: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, paginationFlag{
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag {
             paginationFlag = false
             spinner.startAnimating()
-            // reload data
-            self.marvelHeroesViewModel.prepareToPagination()
-            marvelHeroesViewModel.updateData { (error) in
-                #warning ("Error message not handling here. Alert View should be shown.")
-                guard error == nil else { return }
-                self.marvelHeroesViewModel.addPaginationData()
+            // pagination data
+            marvelHeroesViewModel.paginationData { (error) in
+                guard error == nil else {
+                    self.alertHandler()
+                    return
+                }
                 self.paginationFlag = true
                 self.tableView.reloadData()
             }
         }
     }
-
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let WebVC = segue.destination as? WebVC

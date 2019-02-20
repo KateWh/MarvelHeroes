@@ -9,38 +9,45 @@
 //
 
 import Foundation
+import Alamofire
 
 class HeroesViewModel {
-    #warning ("Try to get rid this paginationData array and simplify business logic")
-    var paginationData: [Hero] = []
+
     var allHeroesData: [Hero] = []
     var limit = 0
     var offset = 0
     
     // get heroes data
     func updateData(complitionHandler: @escaping (Error?) -> Void) {
-        CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
+        CharatersCommunicator.getHeroes(withLimit: 20, withOffset: 0) { (result) in
             switch result {
             case .success(let allAboutHero):
                 self.allHeroesData = allAboutHero.data.results
                 self.limit = allAboutHero.data.limit
                 self.offset = allAboutHero.data.offset + allAboutHero.data.limit
-                complitionHandler(result.error)
+                complitionHandler(nil)
             case .failure(let error):
-                print(error)
-                complitionHandler(result.error)
+                complitionHandler(error)
             }
         }
     }
-    #warning ("Think how you can avoid using of these two functions")
-    func  prepareToPagination() {
-        paginationData = allHeroesData
+
+    // pagination data
+    func paginationData(complitionHandler: @escaping (Error?) -> Void) {
+        CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
+            switch result {
+            case .success(let allAboutHero):
+                self.allHeroesData += allAboutHero.data.results
+                self.limit = allAboutHero.data.limit
+                self.offset = allAboutHero.data.offset + allAboutHero.data.limit
+                complitionHandler(nil)
+            case .failure(let error):
+                complitionHandler(error)
+
+            }
+        }
     }
 
-    func addPaginationData() {
-        self.paginationData += self.allHeroesData
-        self.allHeroesData = self.paginationData
-    }
 
     // get link with hero info
     func getHeroInfoLink(forIndexPath indexPath: IndexPath) -> String {
@@ -58,5 +65,6 @@ class HeroesViewModel {
         heroInfoLink.insert("s", at: heroInfoLink.index(heroInfoLink.startIndex, offsetBy: 4))
         return heroInfoLink
     }
+
 }
 
