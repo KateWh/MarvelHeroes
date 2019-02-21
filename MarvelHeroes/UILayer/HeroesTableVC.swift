@@ -19,13 +19,13 @@ class HeroesTableVC: UITableViewController {
         
         super.viewDidLoad()
         // create spinner to refresh footer animation
-        createSpiner()
+        createSpinner()
 
         // set color to separator lines between cells
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
 
         // call get marvel heroes data
-        marvelHeroesViewModel.paginationData { (error) in
+        marvelHeroesViewModel.updateData { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -38,7 +38,7 @@ class HeroesTableVC: UITableViewController {
     }
 
     // pagination spiner func 
-    func createSpiner() {
+    func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
         spinner.hidesWhenStopped = true
@@ -56,6 +56,8 @@ class HeroesTableVC: UITableViewController {
     }
 
     @objc func reloadData() {
+        marvelHeroesViewModel.clearData()
+        tableView.reloadData()
         marvelHeroesViewModel.updateData { (error) in
             if error == nil {
                 self.tableView.reloadData()
@@ -100,16 +102,17 @@ class HeroesTableVC: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag {
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allHeroesData.isEmpty {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.paginationData { (error) in
+            marvelHeroesViewModel.updateData { (error) in
+                self.spinner.stopAnimating()
+                self.paginationFlag = true
                 guard error == nil else {
                     self.alertHandler()
                     return
                 }
-                self.paginationFlag = true
                 self.tableView.reloadData()
             }
         }

@@ -19,21 +19,6 @@ class HeroesViewModel {
     
     // get heroes data
     func updateData(complitionHandler: @escaping (Error?) -> Void) {
-        CharatersCommunicator.getHeroes(withLimit: 20, withOffset: 0) { (result) in
-            switch result {
-            case .success(let allAboutHero):
-                self.allHeroesData = allAboutHero.data.results
-                self.limit = allAboutHero.data.limit
-                self.offset = allAboutHero.data.offset + allAboutHero.data.limit
-                complitionHandler(nil)
-            case .failure(let error):
-                complitionHandler(error)
-            }
-        }
-    }
-
-    // pagination data
-    func paginationData(complitionHandler: @escaping (Error?) -> Void) {
         CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offset) { (result) in
             switch result {
             case .success(let allAboutHero):
@@ -48,6 +33,10 @@ class HeroesViewModel {
         }
     }
 
+    func clearData() {
+        allHeroesData.removeAll()
+        offset = 0
+    }
 
     // get link with hero info
     func getHeroInfoLink(forIndexPath indexPath: IndexPath) -> String {
