@@ -6,7 +6,6 @@
 //  Copyright © 2019 ket. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class HeroTableViewCell: UITableViewCell {
@@ -57,6 +56,7 @@ class HeroTableViewCell: UITableViewCell {
     // assembled the cell
     func updateCell(withResults results: Hero) {
         // replase "http" with "https", because source link looks like "http", and iOS is angry 😡!
+
         let imageLink = "https" + results.thumbnail.path.dropFirst(4) + "." + results.thumbnail.extension
         self.heroImageLabel.sd_setImage(with: URL(string: imageLink), completed: nil)
         self.heroNameLabel.text = String(results.name)
@@ -66,5 +66,5 @@ class HeroTableViewCell: UITableViewCell {
         self.storiesLabel.text = String(results.stories.available)
         self.eventsLabel.text = String(results.events.available)
     }
-    
+
 }

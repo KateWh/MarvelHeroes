@@ -9,10 +9,10 @@
 import Foundation
 
 struct CharacterDataWrapper: Decodable {
-    let data: CharacterDataContainer
+    let data: HeroesDataContainer
 }
 
-struct CharacterDataContainer: Decodable {
+struct HeroesDataContainer: Decodable {
     let offset: Int
     let limit: Int
     let total: Int
@@ -23,14 +23,14 @@ struct Hero: Decodable {
     let id: Int
     let name: String
     let thumbnail: ImageLink
-    let comics: Comics
+    let comics: InfoComics
     let series: Series
     let stories: Stories
     let events: Events
     let urls: [HeroInfo]
 }
 
-struct Comics: Decodable {
+struct InfoComics: Decodable {
     let available: Int
     let items: [Item]
     struct Item: Decodable {

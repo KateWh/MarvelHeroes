@@ -12,12 +12,15 @@ import Alamofire
 enum Router: URLRequestConvertible {
     
     case getHeroes(withLimit: Int, withOffset: Int)
-    static let baseURLString = "https://gateway.marvel.com/v1/public/characters?"
+    case getComics(withLimit: Int, withOffset: Int)
+    case getCreators(withLimit: Int, withOffset: Int)
+
+    static let baseURLString = "https://gateway.marvel.com"
     
     // define HTTP method
     var method: HTTPMethod {
         switch self {
-        case .getHeroes:
+        case .getHeroes, .getComics, .getCreators:
             return .get
         }
     }
@@ -26,7 +29,11 @@ enum Router: URLRequestConvertible {
     var path: String {
         switch self {
         case .getHeroes(let limit, let offset):
-            return "limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
+            return "/v1/public/characters?limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
+        case .getComics(let limit, let offset):
+            return "/v1/public/comics?limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
+        case .getCreators(let limit, let offset):
+            return "/v1/public/creators?limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
         }
     }
     
@@ -35,7 +42,7 @@ enum Router: URLRequestConvertible {
         let url = try (Router.baseURLString + path).asURL()
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
-        
+        print("Вот это ссылка", urlRequest)
         return urlRequest
     }
 }

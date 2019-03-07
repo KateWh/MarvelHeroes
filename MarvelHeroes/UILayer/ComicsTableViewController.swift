@@ -1,22 +1,22 @@
 //
-//  TableViewCell.swift
+//  ComicsTableViewController.swift
 //  MarvelHeroes
 //
-//  Created by ket on 30.01.2019.
+//  Created by ket on 3/7/19.
 //  Copyright © 2019 ket. All rights reserved.
 //
 
 import UIKit
-import SDWebImage
 
-class HeroesTableVC: UITableViewController {
+class ComicsTableViewController: UITableViewController {
+
     let marvelHeroesViewModel = HeroesViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
 
-    
+
     override func viewDidLoad() {
-        
+
         super.viewDidLoad()
         // create spinner to refresh footer animation
         createSpinner()
@@ -25,40 +25,40 @@ class HeroesTableVC: UITableViewController {
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
 
         // call get marvel heroes data
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateComics { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
                 self.alertHandler()
             }
         }
-        
+
         // call pull-to-refresh
         addRefreshControl()
     }
 
-    // pagination spiner func 
+    // pagination spiner func
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
         spinner.hidesWhenStopped = true
         spinner.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: 60)
-        spinner.color = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+        spinner.color = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
         tableView.tableFooterView = spinner
     }
 
     // pull-to-refresh func
     func addRefreshControl() {
         let refreshControl = UIRefreshControl()
-        refreshControl.tintColor = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+        refreshControl.tintColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
         refreshControl.addTarget(self, action: #selector(reloadData), for: UIControl.Event.valueChanged)
         tableView.refreshControl = refreshControl
     }
 
     @objc func reloadData() {
-        marvelHeroesViewModel.clearHeroes()
+        marvelHeroesViewModel.clearComics()
         tableView.reloadData()
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateComics { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -78,23 +78,17 @@ class HeroesTableVC: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let heroInfoLink = marvelHeroesViewModel.getHeroInfoLink(forIndexPath: indexPath)
-        // go to hero info web page
-        self.performSegue(withIdentifier: "goToHeroInfo", sender: URL(string: heroInfoLink))
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroesViewModel.allHeroesData.count
+        return marvelHeroesViewModel.allComicsData.count
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
-        cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ComicsTableViewCell
+        cell.updateCell(withResults: marvelHeroesViewModel.allComicsData[indexPath.row])
 
         return cell
     }
@@ -102,11 +96,11 @@ class HeroesTableVC: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allHeroesData.isEmpty {
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allComicsData.isEmpty {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.updateData { (error) in
+            marvelHeroesViewModel.updateComics { (error) in
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
@@ -117,10 +111,4 @@ class HeroesTableVC: UITableViewController {
             }
         }
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let WebVC = segue.destination as? WebVC
-        WebVC?.heroLink = sender as? URL
-    }
-    
 }

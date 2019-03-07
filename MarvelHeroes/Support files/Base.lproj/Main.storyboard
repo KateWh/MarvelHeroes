@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jB9-1t-mPo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.30.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="jB9-1t-mPo">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.19.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -371,16 +371,16 @@
             </objects>
             <point key="canvasLocation" x="-503" y="81"/>
         </scene>
-        <!--Heroes-->
+        <!--Creators-->
         <scene sceneID="95X-eL-d3f">
             <objects>
-                <tableViewController id="bcj-JR-AKA" customClass="HeroesTableVC" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="bcj-JR-AKA" customClass="CreatorsTableViewController" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="fic-wg-foT">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.095866085279999999" green="0.4845732868" blue="0.0081341485640000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="279" id="oAG-OT-aD3" customClass="HeroTableViewCell" customModule="MarvelHeroes" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="279" id="oAG-OT-aD3" customClass="CreatorsTableViewCell" customModule="MarvelHeroes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="279"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oAG-OT-aD3" id="mX7-ab-Kc4">
@@ -617,18 +617,18 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="comicsLabel" destination="OE9-ca-Pgg" id="Baa-qu-cxL"/>
-                                    <outlet property="eventsLabel" destination="xrn-uu-bpZ" id="SNf-Az-zpX"/>
-                                    <outlet property="firstYearAppearsInComicsLabel" destination="Hqc-W1-pYa" id="Tvz-ge-xGQ"/>
-                                    <outlet property="heroImageLabel" destination="aoZ-Ct-J7H" id="8dh-vb-YSd"/>
-                                    <outlet property="heroNameLabel" destination="qwC-zZ-7Cv" id="83e-4t-44L"/>
-                                    <outlet property="seriesLabel" destination="VQe-4d-djc" id="vwP-x4-aAu"/>
-                                    <outlet property="storiesLabel" destination="VLM-Ru-nGs" id="LkH-bW-nk3"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="OE9-ca-Pgg" collectionClass="NSMutableArray" id="TXO-do-ojw"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="VQe-4d-djc" collectionClass="NSMutableArray" id="vlO-Wu-X49"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="VLM-Ru-nGs" collectionClass="NSMutableArray" id="qV1-K2-mzh"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="xrn-uu-bpZ" collectionClass="NSMutableArray" id="SDH-td-gxz"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="sW4-vJ-YNd" collectionClass="NSMutableArray" id="Vy5-1f-9PN"/>
+                                    <outlet property="creatorsComicsLabel" destination="OE9-ca-Pgg" id="bxK-8R-dQg"/>
+                                    <outlet property="creatorsEventsLabel" destination="xrn-uu-bpZ" id="aLF-DC-AoX"/>
+                                    <outlet property="creatorsFirstYearAppearsInComicsLabel" destination="9fj-ie-nQm" id="14v-e5-A16"/>
+                                    <outlet property="creatorsImageLabel" destination="aoZ-Ct-J7H" id="Vb7-qR-7Z5"/>
+                                    <outlet property="creatorsNameLabel" destination="qwC-zZ-7Cv" id="sK2-0V-pWe"/>
+                                    <outlet property="creatorsSeriesLabel" destination="VQe-4d-djc" id="nU3-v6-IkY"/>
+                                    <outlet property="creatorsStoriesLabel" destination="VLM-Ru-nGs" id="GKB-Tr-8cm"/>
+                                    <outletCollection property="creatorsDetailsAboutHeroLabels" destination="OE9-ca-Pgg" collectionClass="NSMutableArray" id="fjW-DB-1Db"/>
+                                    <outletCollection property="creatorsDetailsAboutHeroLabels" destination="VQe-4d-djc" collectionClass="NSMutableArray" id="unT-T1-98r"/>
+                                    <outletCollection property="creatorsDetailsAboutHeroLabels" destination="VLM-Ru-nGs" collectionClass="NSMutableArray" id="P8S-YN-3zj"/>
+                                    <outletCollection property="creatorsDetailsAboutHeroLabels" destination="xrn-uu-bpZ" collectionClass="NSMutableArray" id="EuN-yU-RDB"/>
+                                    <outletCollection property="creatorsDetailsAboutHeroLabels" destination="sW4-vJ-YNd" collectionClass="NSMutableArray" id="AoW-LH-jze"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -637,7 +637,7 @@
                             <outlet property="delegate" destination="bcj-JR-AKA" id="d2j-LR-Y0K"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Heroes" id="cQN-ho-Sc1">
+                    <navigationItem key="navigationItem" title="Creators" id="cQN-ho-Sc1">
                         <barButtonItem key="backBarButtonItem" title="Back" id="XS4-og-hhL"/>
                     </navigationItem>
                     <connections>
@@ -692,16 +692,16 @@
             </objects>
             <point key="canvasLocation" x="1745" y="814"/>
         </scene>
-        <!--Heroes-->
+        <!--Comics-->
         <scene sceneID="kbW-36-gqc">
             <objects>
-                <tableViewController id="n55-iv-TkM" customClass="HeroesTableVC" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="n55-iv-TkM" customClass="ComicsTableViewController" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Hkg-pB-Aef">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="0.97290140940000003" blue="0.059958027230000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="279" id="f81-v7-NPh" customClass="HeroTableViewCell" customModule="MarvelHeroes" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="279" id="f81-v7-NPh" customClass="ComicsTableViewCell" customModule="MarvelHeroes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="279"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="f81-v7-NPh" id="kLq-Eg-YYD">
@@ -938,18 +938,18 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="comicsLabel" destination="o50-Yz-Cmz" id="hIY-Fh-MH5"/>
-                                    <outlet property="eventsLabel" destination="KeS-GC-BO4" id="NS5-Oh-z74"/>
-                                    <outlet property="firstYearAppearsInComicsLabel" destination="saZ-4c-ZQv" id="qJV-eL-Bhh"/>
-                                    <outlet property="heroImageLabel" destination="Ekx-No-AsG" id="mtQ-KN-aXv"/>
-                                    <outlet property="heroNameLabel" destination="Muk-H9-dcI" id="QYa-Zo-WmH"/>
-                                    <outlet property="seriesLabel" destination="LZ9-zK-eSL" id="AQy-TZ-ZYt"/>
-                                    <outlet property="storiesLabel" destination="641-fH-gLz" id="u09-1L-cvR"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="o50-Yz-Cmz" collectionClass="NSMutableArray" id="nu8-XC-vGl"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="LZ9-zK-eSL" collectionClass="NSMutableArray" id="OGt-jC-GEd"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="641-fH-gLz" collectionClass="NSMutableArray" id="IBd-nC-EsC"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="KeS-GC-BO4" collectionClass="NSMutableArray" id="SQd-T9-gyB"/>
-                                    <outletCollection property="detailsAboutHeroLabels" destination="Iw3-xW-Lge" collectionClass="NSMutableArray" id="iTt-h5-hXc"/>
+                                    <outlet property="comicsComicsLabel" destination="o50-Yz-Cmz" id="vjK-Ya-g6U"/>
+                                    <outlet property="comicsEventsLabel" destination="KeS-GC-BO4" id="4wP-FG-0eD"/>
+                                    <outlet property="comicsFirstYearAppearsInComicsLabel" destination="saZ-4c-ZQv" id="KcU-Un-goR"/>
+                                    <outlet property="comicsImageLabel" destination="Ekx-No-AsG" id="To0-Q2-E3q"/>
+                                    <outlet property="comicsNameLabel" destination="Muk-H9-dcI" id="SSj-QB-26q"/>
+                                    <outlet property="comicsSeriesLabel" destination="LZ9-zK-eSL" id="jnZ-1z-8DP"/>
+                                    <outlet property="comicsStoriesLabel" destination="641-fH-gLz" id="irX-Tv-Dkt"/>
+                                    <outletCollection property="comicsDetailsAboutHeroLabels" destination="o50-Yz-Cmz" collectionClass="NSMutableArray" id="IzQ-0M-4fF"/>
+                                    <outletCollection property="comicsDetailsAboutHeroLabels" destination="LZ9-zK-eSL" collectionClass="NSMutableArray" id="6Ta-r1-lwo"/>
+                                    <outletCollection property="comicsDetailsAboutHeroLabels" destination="641-fH-gLz" collectionClass="NSMutableArray" id="YM9-uw-srL"/>
+                                    <outletCollection property="comicsDetailsAboutHeroLabels" destination="KeS-GC-BO4" collectionClass="NSMutableArray" id="bt6-Lt-6fv"/>
+                                    <outletCollection property="comicsDetailsAboutHeroLabels" destination="Iw3-xW-Lge" collectionClass="NSMutableArray" id="cPx-dt-SXC"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -958,7 +958,7 @@
                             <outlet property="delegate" destination="n55-iv-TkM" id="ctl-fJ-cNB"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Heroes" id="Li1-hk-l87">
+                    <navigationItem key="navigationItem" title="Comics" id="Li1-hk-l87">
                         <barButtonItem key="backBarButtonItem" title="Back" id="IO8-5L-Taq"/>
                     </navigationItem>
                     <connections>

@@ -1,22 +1,23 @@
 //
-//  TableViewCell.swift
+//  CreatorsTableViewController.swift
 //  MarvelHeroes
 //
-//  Created by ket on 30.01.2019.
+//  Created by ket on 3/7/19.
 //  Copyright © 2019 ket. All rights reserved.
 //
 
 import UIKit
-import SDWebImage
 
-class HeroesTableVC: UITableViewController {
+class CreatorsTableViewController: UITableViewController {
+
+
     let marvelHeroesViewModel = HeroesViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
 
-    
+
     override func viewDidLoad() {
-        
+
         super.viewDidLoad()
         // create spinner to refresh footer animation
         createSpinner()
@@ -25,19 +26,19 @@ class HeroesTableVC: UITableViewController {
         tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
 
         // call get marvel heroes data
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateCreators { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
                 self.alertHandler()
             }
         }
-        
+
         // call pull-to-refresh
         addRefreshControl()
     }
 
-    // pagination spiner func 
+    // pagination spiner func
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
@@ -56,9 +57,9 @@ class HeroesTableVC: UITableViewController {
     }
 
     @objc func reloadData() {
-        marvelHeroesViewModel.clearHeroes()
+        marvelHeroesViewModel.clearCreators()
         tableView.reloadData()
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateCreators { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -78,23 +79,17 @@ class HeroesTableVC: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let heroInfoLink = marvelHeroesViewModel.getHeroInfoLink(forIndexPath: indexPath)
-        // go to hero info web page
-        self.performSegue(withIdentifier: "goToHeroInfo", sender: URL(string: heroInfoLink))
-    }
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroesViewModel.allHeroesData.count
+        return marvelHeroesViewModel.allCreatorsData.count
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
-        cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CreatorsTableViewCell
+        cell.updateCell(withResults: marvelHeroesViewModel.allCreatorsData[indexPath.row])
 
         return cell
     }
@@ -102,11 +97,11 @@ class HeroesTableVC: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allHeroesData.isEmpty {
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allCreatorsData.isEmpty {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.updateData { (error) in
+            marvelHeroesViewModel.updateCreators { (error) in
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
@@ -117,10 +112,4 @@ class HeroesTableVC: UITableViewController {
             }
         }
     }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let WebVC = segue.destination as? WebVC
-        WebVC?.heroLink = sender as? URL
-    }
-    
 }
