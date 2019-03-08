@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class WebVC: UIViewController {
+class HeroesWebVC: UIViewController {
 
     var heroLink: URL?
     @IBOutlet weak var webView: WKWebView!

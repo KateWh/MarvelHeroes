@@ -9,7 +9,8 @@
 import UIKit
 import SDWebImage
 
-class HeroesTableVC: UITableViewController {
+class HeroesTableViewController: UITableViewController {
+    
     let marvelHeroesViewModel = HeroesViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
@@ -21,11 +22,8 @@ class HeroesTableVC: UITableViewController {
         // create spinner to refresh footer animation
         createSpinner()
 
-        // set color to separator lines between cells
-        tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-
         // call get marvel heroes data
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateHeroes { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -58,7 +56,7 @@ class HeroesTableVC: UITableViewController {
     @objc func reloadData() {
         marvelHeroesViewModel.clearHeroes()
         tableView.reloadData()
-        marvelHeroesViewModel.updateData { (error) in
+        marvelHeroesViewModel.updateHeroes { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -106,7 +104,7 @@ class HeroesTableVC: UITableViewController {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.updateData { (error) in
+            marvelHeroesViewModel.updateHeroes { (error) in
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
@@ -119,8 +117,8 @@ class HeroesTableVC: UITableViewController {
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let WebVC = segue.destination as? WebVC
-        WebVC?.heroLink = sender as? URL
+        let heroesWebVC = segue.destination as? HeroesWebVC
+        heroesWebVC?.heroLink = sender as? URL
     }
     
 }

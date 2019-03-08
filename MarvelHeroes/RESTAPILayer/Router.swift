@@ -42,7 +42,6 @@ enum Router: URLRequestConvertible {
         let url = try (Router.baseURLString + path).asURL()
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
-        print("Вот это ссылка", urlRequest)
         return urlRequest
     }
 }

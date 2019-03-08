@@ -10,8 +10,7 @@ import UIKit
 
 class CreatorsTableViewController: UITableViewController {
 
-
-    let marvelHeroesViewModel = HeroesViewModel()
+    let marvelCreatorsViewModel = CreatorsViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
 
@@ -22,11 +21,8 @@ class CreatorsTableViewController: UITableViewController {
         // create spinner to refresh footer animation
         createSpinner()
 
-        // set color to separator lines between cells
-        tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-
         // call get marvel heroes data
-        marvelHeroesViewModel.updateCreators { (error) in
+        marvelCreatorsViewModel.updateCreators { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -57,9 +53,9 @@ class CreatorsTableViewController: UITableViewController {
     }
 
     @objc func reloadData() {
-        marvelHeroesViewModel.clearCreators()
+        marvelCreatorsViewModel.clearCreators()
         tableView.reloadData()
-        marvelHeroesViewModel.updateCreators { (error) in
+        marvelCreatorsViewModel.updateCreators { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -78,9 +74,15 @@ class CreatorsTableViewController: UITableViewController {
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let creatorLink = marvelCreatorsViewModel.getCreatorInfoLink(forIndexPath: indexPath)
+        // go to creator info web page
+        self.performSegue(withIdentifier: "goToCreatorInfo", sender: URL(string: creatorLink))
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroesViewModel.allCreatorsData.count
+        return marvelCreatorsViewModel.allCreatorsData.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -89,7 +91,7 @@ class CreatorsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CreatorsTableViewCell
-        cell.updateCell(withResults: marvelHeroesViewModel.allCreatorsData[indexPath.row])
+        cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
 
         return cell
     }
@@ -97,11 +99,11 @@ class CreatorsTableViewController: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allCreatorsData.isEmpty {
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelCreatorsViewModel.allCreatorsData.isEmpty {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.updateCreators { (error) in
+            marvelCreatorsViewModel.updateCreators { (error) in
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
@@ -111,5 +113,10 @@ class CreatorsTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let creatorsWebVC = segue.destination as? CreatorsWebVC
+        creatorsWebVC?.creatorLink = sender as? URL
     }
 }

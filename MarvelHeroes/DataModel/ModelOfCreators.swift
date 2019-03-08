@@ -15,16 +15,47 @@ struct CreatorsDataWrapper: Decodable {
 struct CreatorsData: Decodable {
     let offset: Int
     let limit: Int
-    let results: [Creators]
+    let results: [Creator]
 }
 
-struct Creators: Decodable {
+struct Creator: Decodable {
     let id: Int
     let fullName: String
-    let thumbnail: CreatorsThumbnail
+    let thumbnail: CreatorThumbnail
+    let comics: ComicsItems
+    let series: SeriesItem
+    let stories: StoriesItem
+    let events: Event
+    let urls: [detailUrl]
 }
 
-struct CreatorsThumbnail: Decodable {
+struct CreatorThumbnail: Decodable {
     let path: String
     let `extension`: String
+}
+
+struct ComicsItems: Decodable {
+    let available: Int
+    let items: [Item]
+}
+
+struct SeriesItem: Decodable {
+    let available: Int
+}
+
+struct StoriesItem: Decodable {
+    let available: Int
+}
+
+struct Event: Decodable {
+    let available: Int
+}
+
+struct Item: Decodable {
+    let name: String
+}
+
+struct detailUrl: Decodable {
+    let type: String
+    let url: String
 }

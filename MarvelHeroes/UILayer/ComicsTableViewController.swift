@@ -10,22 +10,18 @@ import UIKit
 
 class ComicsTableViewController: UITableViewController {
 
-    let marvelHeroesViewModel = HeroesViewModel()
+    let marvelComicsViewModel = ComicsViewModel()
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
 
 
     override func viewDidLoad() {
-
         super.viewDidLoad()
         // create spinner to refresh footer animation
         createSpinner()
 
-        // set color to separator lines between cells
-        tableView.separatorColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-
         // call get marvel heroes data
-        marvelHeroesViewModel.updateComics { (error) in
+        marvelComicsViewModel.updateComics { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -56,9 +52,9 @@ class ComicsTableViewController: UITableViewController {
     }
 
     @objc func reloadData() {
-        marvelHeroesViewModel.clearComics()
+        marvelComicsViewModel.clearComics()
         tableView.reloadData()
-        marvelHeroesViewModel.updateComics { (error) in
+        marvelComicsViewModel.updateComics { (error) in
             if error == nil {
                 self.tableView.reloadData()
             } else {
@@ -78,8 +74,14 @@ class ComicsTableViewController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let comicsInfoLink = marvelComicsViewModel.getComicsInfoLink(forIndexPath: indexPath)
+        // go to hero info web page
+        self.performSegue(withIdentifier: "goToComicsInfo", sender: URL(string: comicsInfoLink))
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return marvelHeroesViewModel.allComicsData.count
+        return marvelComicsViewModel.allComicsData.count
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -88,7 +90,7 @@ class ComicsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ComicsTableViewCell
-        cell.updateCell(withResults: marvelHeroesViewModel.allComicsData[indexPath.row])
+        cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
 
         return cell
     }
@@ -96,11 +98,11 @@ class ComicsTableViewController: UITableViewController {
     // pagination cells
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset.y + tableView.frame.size.height, tableView.contentSize.height)
-        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelHeroesViewModel.allComicsData.isEmpty {
+        if (tableView.contentOffset.y + tableView.frame.size.height) > tableView.contentSize.height, scrollView.isDragging, paginationFlag, !marvelComicsViewModel.allComicsData.isEmpty {
             paginationFlag = false
             spinner.startAnimating()
             // pagination data
-            marvelHeroesViewModel.updateComics { (error) in
+            marvelComicsViewModel.updateComics { (error) in
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
@@ -110,5 +112,10 @@ class ComicsTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let comicsWebVC = segue.destination as? ComicsWebVC
+        comicsWebVC?.comicsLink = sender as? URL
     }
 }

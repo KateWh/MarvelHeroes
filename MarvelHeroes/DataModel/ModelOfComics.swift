@@ -21,10 +21,34 @@ struct ComicsData: Decodable {
 struct Comics: Decodable {
     let id: Int
     let title: String
+    let format: String
+    let pageCount: Int
     let thumbnail: Thumbnail
+    let characters: CharacterInCurrentComics
+    let series: [String: String]
+    let stories: Story
+    let creators: CreatorOfComics
+    let urls: [comicsUrl]
 }
 
 struct Thumbnail: Decodable {
     let path: String
     let `extension`: String
+}
+
+struct CharacterInCurrentComics: Decodable {
+    let available: Int
+}
+
+struct Story: Decodable {
+    let available: Int
+}
+
+struct CreatorOfComics: Decodable {
+    let available: Int
+}
+
+struct comicsUrl: Decodable {
+    let type: String
+    let url: String
 }

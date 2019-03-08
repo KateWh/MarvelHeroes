@@ -10,19 +10,19 @@ import UIKit
 
 class CreatorsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var creatorsNameLabel: UILabel!
-    @IBOutlet weak var creatorsImageLabel: UIImageView!
-    @IBOutlet weak var creatorsFirstYearAppearsInComicsLabel: UILabel!
-    @IBOutlet var creatorsDetailsAboutHeroLabels: [UILabel]!
-    @IBOutlet weak var creatorsComicsLabel: UILabel!
-    @IBOutlet weak var creatorsSeriesLabel: UILabel!
-    @IBOutlet weak var creatorsStoriesLabel: UILabel!
-    @IBOutlet weak var creatorsEventsLabel: UILabel!
+    @IBOutlet weak var creatorNameLabel: UILabel!
+    @IBOutlet weak var creatorImageLabel: UIImageView!
+    @IBOutlet weak var creatorWriteFirstComicsLabel: UILabel!
+    @IBOutlet var creatorDetailsLabels: [UILabel]!
+    @IBOutlet weak var creatorComicsLabel: UILabel!
+    @IBOutlet weak var creatorSeriesLabel: UILabel!
+    @IBOutlet weak var creatorStoriesLabel: UILabel!
+    @IBOutlet weak var creatorEventsLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // set corner radius to details labels
-        for label in creatorsDetailsAboutHeroLabels {
+        for label in creatorDetailsLabels {
             label.layer.cornerRadius = 5
             label.layer.masksToBounds = true
         }
@@ -40,15 +40,30 @@ class CreatorsTableViewCell: UITableViewCell {
             return []
         }
     }
-
-
+    
+    // find the earliest date when creator write first comics
+    func findEarliestDate(from results: Creator) -> String {
+        var dateArray = [String]()
+        for comics in results.comics.items {
+            let comicsDate = matches(for: "\\([0-9]{4}\\)", in: comics.name)
+            if comicsDate != [] {
+                dateArray.append(comicsDate[0])
+            }
+        }
+        return dateArray.sorted(by: < ).first ?? "(????)"
+    }
 
     // assembled the cell
-    func updateCell(withResults results: Creators) {
+    func updateCell(withResults results: Creator) {
         // replase "http" with "https", because source link looks like "http", and iOS is angry 😡!
         let imageLink = "https" + results.thumbnail.path.dropFirst(4) + "." + results.thumbnail.extension
-        self.creatorsImageLabel.sd_setImage(with: URL(string: imageLink), completed: nil)
-        self.creatorsNameLabel.text = String(results.fullName)
+        self.creatorImageLabel.sd_setImage(with: URL(string: imageLink), completed: nil)
+        self.creatorNameLabel.text = String(results.fullName)
+        self.creatorWriteFirstComicsLabel.text = findEarliestDate(from: results)
+        self.creatorComicsLabel.text = String(describing: results.comics.available)
+        self.creatorSeriesLabel.text = String(describing: results.series.available)
+        self.creatorStoriesLabel.text = String(describing: results.stories.available)
+        self.creatorEventsLabel.text = String(describing: results.events.available)
     }
 
 }
