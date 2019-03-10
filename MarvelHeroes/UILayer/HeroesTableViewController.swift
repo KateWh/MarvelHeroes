@@ -11,14 +11,24 @@ import SDWebImage
 
 class HeroesTableViewController: UITableViewController {
     
-    let marvelHeroesViewModel = HeroesViewModel()
-    var spinner = UIActivityIndicatorView()
-    var paginationFlag = true
-
+    
+    private let searchController = UISearchController(searchResultsController: nil)
+    private let marvelHeroesViewModel = HeroesViewModel()
+    private var spinner = UIActivityIndicatorView()
+    private var paginationFlag = true
+    private var filteredHeroes = [Hero]()
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
+        // Call Search Controller
+        setupSearchController()
         // create spinner to refresh footer animation
         createSpinner()
 
@@ -33,8 +43,32 @@ class HeroesTableViewController: UITableViewController {
         
         // call pull-to-refresh
         addRefreshControl()
+        
+        // Setup the Scope Bar
+        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        searchController.searchBar.delegate = self
     }
 
+    // cet up the search controller
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Heroes"
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
+        //UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .black
+        let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = .black
+        
+        searchController.searchBar.textField.addTarget(self, action: #selector(goToWeb), for: UIControl.Event.primaryActionTriggered)
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+    
+    // selector of search controller
+    @objc func goToWeb() {
+        print("WEB")
+    }
+    
     // pagination spiner func 
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
@@ -83,6 +117,9 @@ class HeroesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredHeroes.count
+        }
         return marvelHeroesViewModel.allHeroesData.count
     }
     
@@ -92,8 +129,13 @@ class HeroesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
-        cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
+        //cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
 
+        if isFiltering {
+            cell.updateCell(withResults: filteredHeroes[indexPath.row])
+        } else {
+            cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
+        }
         return cell
     }
 
@@ -122,3 +164,37 @@ class HeroesTableViewController: UITableViewController {
     }
     
 }
+
+extension HeroesTableViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+        filteredHeroes = marvelHeroesViewModel.allHeroesData.filter({(hero: Hero) -> Bool in
+            return hero.name.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()
+    }
+}
+
+// MARK: UISearchBar Delegate
+extension HeroesTableViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(searchBar.text!)
+    }
+}
+
+extension UISearchBar {
+    
+    var textField: UITextField {
+        guard let txtField = self.value(forKey: "searchField") as? UITextField else {
+            assertionFailure()
+            return UITextField()
+        }
+        return txtField
+    }
+
+}
+
