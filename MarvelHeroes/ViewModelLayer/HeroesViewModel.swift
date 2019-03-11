@@ -56,5 +56,16 @@ class HeroesViewModel {
         return heroInfoLink
     }
 
+// get seaching hero
+    func getSearchHero(heroName name: String, completionHandler: @escaping([Hero]?) -> Void) {
+        CharatersCommunicator.getSearchHero(withName: name) { result in
+            switch result {
+            case .success(let allAboutHero):
+            completionHandler(allAboutHero.data.results)
+            case .failure(_):
+                completionHandler(nil)
+            }
+        }
+    }
 }
 

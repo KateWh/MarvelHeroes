@@ -26,5 +26,19 @@ struct CharatersCommunicator {
         }
     }
 
+    static func getSearchHero(withName name: String, completionHandler: @escaping (Result<CharacterDataWrapper>) -> Void ) {
+        Alamofire.request(Router.getSearchHero(withName: name)).responseJSON {
+            response in
+            if let data = response.data {
+                do {
+                    let decoder = JSONDecoder()
+                    let receivedData = try decoder.decode(CharacterDataWrapper.self, from: data)
+                    completionHandler(.success(receivedData))
+                } catch {
+                    completionHandler(.failure(error))
+                }
+            }
+        }
+    }
 
 }

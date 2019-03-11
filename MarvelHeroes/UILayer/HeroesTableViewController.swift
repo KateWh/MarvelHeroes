@@ -17,6 +17,7 @@ class HeroesTableViewController: UITableViewController {
     private var spinner = UIActivityIndicatorView()
     private var paginationFlag = true
     private var filteredHeroes = [Hero]()
+    private var selectedScopeState = "In Phone"
     private var searchBarIsEmpty: Bool {
         guard let text = searchController.searchBar.text else { return false }
         return text.isEmpty
@@ -55,7 +56,6 @@ class HeroesTableViewController: UITableViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Heroes"
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
-        //UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .black
         let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
         textFieldInsideSearchBarLabel?.textColor = .black
         
@@ -106,6 +106,15 @@ class HeroesTableViewController: UITableViewController {
         let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
         alert.addAction(alertAction)
         alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        alert.view.layer.cornerRadius = 10
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func alertSearchHander() {
+        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
+        alert.addAction(alertAction)
+        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
     }
@@ -165,24 +174,44 @@ class HeroesTableViewController: UITableViewController {
     
 }
 
-extension HeroesTableViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!)
-    }
-    
-    private func filterContentForSearchText(_ searchText: String) {
-        filteredHeroes = marvelHeroesViewModel.allHeroesData.filter({(hero: Hero) -> Bool in
-            return hero.name.lowercased().contains(searchText.lowercased())
-        })
-        
-        tableView.reloadData()
-    }
-}
+extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
 
-// MARK: UISearchBar Delegate
-extension HeroesTableViewController: UISearchBarDelegate {
+    // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        filterContentForSearchText(searchBar.text!)
+        print("Я внутри selectedScopeButtonIndexDidChange")
+        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+    }
+
+    // called when user input text to search field
+    func updateSearchResults(for searchController: UISearchController) {
+        print("Внутри updateSearchResults")
+        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
+    }
+
+    // filter content by searching text
+    private func filterContentForSearchText(_ searchText: String, scope: String) {
+        print("Внутри filterContentForSearchText")
+        print("scope: \(scope)")
+
+        if scope == "In Phone" {
+            print("Внутри In Phone")
+            filteredHeroes = marvelHeroesViewModel.allHeroesData.filter({(hero: Hero) -> Bool in
+                return hero.name.lowercased().contains(searchText.lowercased())
+            })
+        } else if scope == "In Web" {
+            print("Внутри In Web")
+            marvelHeroesViewModel.getSearchHero(heroName: searchText) { results in
+                if results != nil {
+                    self.filteredHeroes = results!
+                    self.tableView.reloadData()
+                } else if !self.filteredHeroes.isEmpty && searchText != "" {
+                    self.alertSearchHander()
+                }
+            }
+        }
+
+        tableView.reloadData()
     }
 }
 
