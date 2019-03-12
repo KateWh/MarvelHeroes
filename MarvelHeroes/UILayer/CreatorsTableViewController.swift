@@ -11,13 +11,24 @@ import UIKit
 class CreatorsTableViewController: UITableViewController {
 
     let marvelCreatorsViewModel = CreatorsViewModel()
+    private let searchController = UISearchController(searchResultsController: nil)
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-
+    private var filteredCreators = [Creator]()
+    private var selectedScopeState = "In Phone"
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
 
     override func viewDidLoad() {
 
         super.viewDidLoad()
+        // Call Search Controller
+        setupSearchController()
         // create spinner to refresh footer animation
         createSpinner()
 
@@ -32,6 +43,29 @@ class CreatorsTableViewController: UITableViewController {
 
         // call pull-to-refresh
         addRefreshControl()
+
+        // Setup the Scope Bar
+        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        searchController.searchBar.delegate = self
+    }
+
+    // cet up the search controller
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Creators"
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
+        let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = .black
+
+        searchController.searchBar.textField.addTarget(self, action: #selector(goToWeb), for: UIControl.Event.primaryActionTriggered)
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+
+    // selector of search controller
+    @objc func goToWeb() {
+        print("WEB")
     }
 
     // pagination spiner func
@@ -74,7 +108,16 @@ class CreatorsTableViewController: UITableViewController {
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
     }
-    
+
+    func alertSearchHander() {
+        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
+        alert.addAction(alertAction)
+        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+        alert.view.layer.cornerRadius = 10
+        self.present(alert, animated: true, completion: nil)
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let creatorLink = marvelCreatorsViewModel.getCreatorInfoLink(forIndexPath: indexPath)
         // go to creator info web page
@@ -82,6 +125,9 @@ class CreatorsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredCreators.count
+        }
         return marvelCreatorsViewModel.allCreatorsData.count
     }
 
@@ -91,8 +137,13 @@ class CreatorsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CreatorsTableViewCell
-        cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
+        //cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
 
+        if isFiltering {
+            cell.updateCell(withResults: filteredCreators[indexPath.row])
+        } else {
+            cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
+        }
         return cell
     }
 
@@ -119,4 +170,57 @@ class CreatorsTableViewController: UITableViewController {
         let creatorsWebVC = segue.destination as? CreatorsWebVC
         creatorsWebVC?.creatorLink = sender as? URL
     }
+}
+
+extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+
+    // this method is called when the scopeBar has changed
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print("Я внутри selectedScopeButtonIndexDidChange")
+        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+    }
+
+    // called when user input text to search field
+    func updateSearchResults(for searchController: UISearchController) {
+        print("Внутри updateSearchResults")
+        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
+    }
+
+    // filter content by searching text
+    private func filterContentForSearchText(_ searchText: String, scope: String) {
+        print("Внутри filterContentForSearchText")
+        print("scope: \(scope)")
+
+        if scope == "In Phone" {
+            print("Внутри In Phone")
+            filteredCreators = marvelCreatorsViewModel.allCreatorsData.filter({(creators: Creator) -> Bool in
+                return creators.fullName.lowercased().contains(searchText.lowercased())
+            })
+        } else if scope == "In Web" {
+            print("Внутри In Web")
+            marvelCreatorsViewModel.getSearchCreators(heroName: searchText) { results in
+                if results != nil {
+                    self.filteredCreators = results!
+                    self.tableView.reloadData()
+                } else if !self.filteredCreators.isEmpty && searchText != "" {
+                    self.alertSearchHander()
+                }
+            }
+        }
+
+        tableView.reloadData()
+    }
+}
+
+extension UISearchBar {
+
+    var textField: UITextField {
+        guard let txtField = self.value(forKey: "searchField") as? UITextField else {
+            assertionFailure()
+            return UITextField()
+        }
+        return txtField
+    }
+
 }

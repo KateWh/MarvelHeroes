@@ -26,6 +26,20 @@ struct CreatorsCommunicator {
             }
         }
     }
-    
-    
+
+    static func getSearchCreators(withName name: String, completionHandler: @escaping (Result<CreatorsDataWrapper>) -> Void ) {
+        Alamofire.request(Router.getSearchCreators(withName: name)).responseJSON {
+            response in
+            if let data = response.data {
+                do {
+                    let decoder = JSONDecoder()
+                    let receivedData = try decoder.decode(CreatorsDataWrapper.self, from: data)
+                    completionHandler(.success(receivedData))
+                } catch {
+                    completionHandler(.failure(error))
+                }
+            }
+        }
+    }
+
 }

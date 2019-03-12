@@ -50,5 +50,16 @@ class ComicsViewModel {
         comicsInfoLink.insert("s", at: comicsInfoLink.index(comicsInfoLink.startIndex, offsetBy: 4))
         return comicsInfoLink
     }
-    
+
+    // get seaching comics
+    func getSearchComics(heroName name: String, completionHandler: @escaping([Comics]?) -> Void) {
+        ComicsCommunicator.getSearchComics(withName: name) { result in
+            switch result {
+            case .success(let allAboutComics):
+                completionHandler(allAboutComics.data.results)
+            case .failure(_):
+                completionHandler(nil)
+            }
+        }
+    }
 }

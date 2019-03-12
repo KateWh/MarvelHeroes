@@ -50,6 +50,19 @@ class CreatorsViewModel {
         creatorInfoLink.insert("s", at: creatorInfoLink.index(creatorInfoLink.startIndex, offsetBy: 4))
         return creatorInfoLink
     }
+
+    // get seaching hero
+    func getSearchCreators(heroName name: String, completionHandler: @escaping([Creator]?) -> Void) {
+        CreatorsCommunicator.getSearchCreators(withName: name) { result in
+            switch result {
+            case .success(let allAboutCreator):
+                completionHandler(allAboutCreator.data.results)
+            case .failure(_):
+                completionHandler(nil)
+            }
+        }
+    }
+
 }
 
 

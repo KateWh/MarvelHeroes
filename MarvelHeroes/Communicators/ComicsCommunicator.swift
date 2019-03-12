@@ -26,5 +26,20 @@ struct ComicsCommunicator {
         }
     }
 
-    
+    static func getSearchComics(withName name: String, completionHandler: @escaping (Result<ComicsDataWrapper>) -> Void ) {
+        Alamofire.request(Router.getSearchComics(withTitle: name)).responseJSON {
+            response in
+            if let data = response.data {
+                do {
+                    let decoder = JSONDecoder()
+                    let receivedData = try decoder.decode(ComicsDataWrapper.self, from: data)
+                    completionHandler(.success(receivedData))
+                } catch {
+                    completionHandler(.failure(error))
+                }
+            }
+        }
+    }
+
+
 }

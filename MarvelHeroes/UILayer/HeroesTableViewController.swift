@@ -10,10 +10,9 @@ import UIKit
 import SDWebImage
 
 class HeroesTableViewController: UITableViewController {
-    
-    
-    private let searchController = UISearchController(searchResultsController: nil)
+
     private let marvelHeroesViewModel = HeroesViewModel()
+    private let searchController = UISearchController(searchResultsController: nil)
     private var spinner = UIActivityIndicatorView()
     private var paginationFlag = true
     private var filteredHeroes = [Hero]()
@@ -214,16 +213,3 @@ extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegat
         tableView.reloadData()
     }
 }
-
-extension UISearchBar {
-    
-    var textField: UITextField {
-        guard let txtField = self.value(forKey: "searchField") as? UITextField else {
-            assertionFailure()
-            return UITextField()
-        }
-        return txtField
-    }
-
-}
-

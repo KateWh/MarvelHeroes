@@ -11,12 +11,23 @@ import UIKit
 class ComicsTableViewController: UITableViewController {
 
     let marvelComicsViewModel = ComicsViewModel()
+    private let searchController = UISearchController(searchResultsController: nil)
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-
+    private var filteredComics = [Comics]()
+    private var selectedScopeState = "In Phone"
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Call Search Controller
+        setupSearchController()
         // create spinner to refresh footer animation
         createSpinner()
 
@@ -31,6 +42,29 @@ class ComicsTableViewController: UITableViewController {
 
         // call pull-to-refresh
         addRefreshControl()
+
+        // Setup the Scope Bar
+        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        searchController.searchBar.delegate = self
+    }
+
+    // cet up the search controller
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search Creators"
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
+        let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
+        textFieldInsideSearchBarLabel?.textColor = .black
+
+        searchController.searchBar.textField.addTarget(self, action: #selector(goToWeb), for: UIControl.Event.primaryActionTriggered)
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
+    }
+
+    // selector of search controller
+    @objc func goToWeb() {
+        print("WEB")
     }
 
     // pagination spiner func
@@ -74,6 +108,15 @@ class ComicsTableViewController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
 
+    func alertSearchHander() {
+        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
+        alert.addAction(alertAction)
+        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+        alert.view.layer.cornerRadius = 10
+        self.present(alert, animated: true, completion: nil)
+    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let comicsInfoLink = marvelComicsViewModel.getComicsInfoLink(forIndexPath: indexPath)
         // go to hero info web page
@@ -81,6 +124,9 @@ class ComicsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filteredComics.count
+        }
         return marvelComicsViewModel.allComicsData.count
     }
 
@@ -90,8 +136,13 @@ class ComicsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ComicsTableViewCell
-        cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
+        //cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
 
+        if isFiltering {
+            cell.updateCell(withResults: filteredComics[indexPath.row])
+        } else {
+            cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
+        }
         return cell
     }
 
@@ -117,5 +168,47 @@ class ComicsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let comicsWebVC = segue.destination as? ComicsWebVC
         comicsWebVC?.comicsLink = sender as? URL
+    }
+}
+
+
+extension ComicsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+
+    // this method is called when the scopeBar has changed
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        print("Я внутри selectedScopeButtonIndexDidChange")
+        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+    }
+
+    // called when user input text to search field
+    func updateSearchResults(for searchController: UISearchController) {
+        print("Внутри updateSearchResults")
+        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
+    }
+
+    // filter content by searching text
+    private func filterContentForSearchText(_ searchText: String, scope: String) {
+        print("Внутри filterContentForSearchText")
+        print("scope: \(scope)")
+
+        if scope == "In Phone" {
+            print("Внутри In Phone")
+            filteredComics = marvelComicsViewModel.allComicsData.filter({(comics: Comics) -> Bool in
+                return comics.title.lowercased().contains(searchText.lowercased())
+            })
+        } else if scope == "In Web" {
+            print("Внутри In Web")
+            marvelComicsViewModel.getSearchComics(heroName: searchText) { results in
+                if results != nil {
+                    self.filteredComics = results!
+                    self.tableView.reloadData()
+                } else if !self.filteredComics.isEmpty && searchText != "" {
+                    self.alertSearchHander()
+                }
+            }
+        }
+
+        tableView.reloadData()
     }
 }

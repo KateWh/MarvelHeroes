@@ -15,13 +15,15 @@ enum Router: URLRequestConvertible {
     case getComics(withLimit: Int, withOffset: Int)
     case getCreators(withLimit: Int, withOffset: Int)
     case getSearchHero(withName: String)
+    case getSearchComics(withTitle: String)
+    case getSearchCreators(withName: String)
 
     static let baseURLString = "https://gateway.marvel.com"
     
     // define HTTP method
     var method: HTTPMethod {
         switch self {
-        case .getHeroes, .getComics, .getCreators, .getSearchHero:
+        case .getHeroes, .getComics, .getCreators, .getSearchHero, .getSearchComics, .getSearchCreators:
             return .get
         }
     }
@@ -38,7 +40,10 @@ enum Router: URLRequestConvertible {
         case .getSearchHero(let name):
             return "/v1/public/characters?nameStartsWith=\(name)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
 
-        }
+        case .getSearchCreators(let name):
+            return "/v1/public/creators?nameStartsWith=\(name)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
+        case .getSearchComics(let title):
+            return "/v1/public/comics?titleStartsWith=\(title)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"        }
     }
     
     // MARK: URLRequestConvertible
