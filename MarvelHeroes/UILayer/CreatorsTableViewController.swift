@@ -176,29 +176,22 @@ extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDeleg
 
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print("Я внутри selectedScopeButtonIndexDidChange")
         selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
         filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
-        print("Внутри updateSearchResults")
         filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
     }
 
     // filter content by searching text
     private func filterContentForSearchText(_ searchText: String, scope: String) {
-        print("Внутри filterContentForSearchText")
-        print("scope: \(scope)")
-
         if scope == "In Phone" {
-            print("Внутри In Phone")
             filteredCreators = marvelCreatorsViewModel.allCreatorsData.filter({(creators: Creator) -> Bool in
                 return creators.fullName.lowercased().contains(searchText.lowercased())
             })
         } else if scope == "In Web" {
-            print("Внутри In Web")
             marvelCreatorsViewModel.getSearchCreators(heroName: searchText) { results in
                 if results != nil {
                     self.filteredCreators = results!
@@ -214,7 +207,6 @@ extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDeleg
 }
 
 extension UISearchBar {
-
     var textField: UITextField {
         guard let txtField = self.value(forKey: "searchField") as? UITextField else {
             assertionFailure()

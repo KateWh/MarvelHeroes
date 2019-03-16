@@ -33,6 +33,7 @@ enum Router: URLRequestConvertible {
         switch self {
         case .getHeroes(let limit, let offset):
             return "/v1/public/characters?limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
+ 
         case .getComics(let limit, let offset):
             return "/v1/public/comics?limit=\(limit)&offset=\(offset)&ts=1&apikey=7fcabde7c43d136312c02ddd457b5585&hash=59d26685428cdfe4e89e35ca8e90038a"
         case .getCreators(let limit, let offset):
@@ -53,6 +54,7 @@ enum Router: URLRequestConvertible {
         urlRequest.httpMethod = method.rawValue
         return urlRequest
     }
+    
 }
 
 
