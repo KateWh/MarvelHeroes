@@ -101,12 +101,13 @@ class ComicsTableViewController: UITableViewController {
     }
 
     func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alert = UIAlertController(title: "Ops..", message: "Comics not found!", preferredStyle: .alert )
         let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
         alert.addAction(alertAction)
         alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
+        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -164,7 +165,6 @@ class ComicsTableViewController: UITableViewController {
 
 
 extension ComicsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
-
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         print("Я внутри selectedScopeButtonIndexDidChange")
@@ -189,11 +189,20 @@ extension ComicsTableViewController: UISearchResultsUpdating, UISearchBarDelegat
                 return comics.title.lowercased().contains(searchText.lowercased())
             })
         } else if scope == "In Web" {
-            print("Внутри In Web")
+            // start spinner inside searchBarTextField
+            if searchController.searchBar.textField!.text != "" {
+                searchController.searchBar.isLoading = true
+                searchController.searchBar.activityIndicator?.color = #colorLiteral(red: 0.1126269036, green: 0.07627656838, blue: 0.01553396923, alpha: 1)
+                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.9310250282, green: 0.8915370107, blue: 0.03296109289, alpha: 1)
+            } else {
+                searchController.searchBar.isLoading = false
+            }
+            // search comics in web
             marvelComicsViewModel.getSearchComics(heroName: searchText) { results in
                 if results != nil {
                     self.filteredComics = results!
                     self.tableView.reloadData()
+                    self.searchController.searchBar.isLoading = false
                 } else if !self.filteredComics.isEmpty && searchText != "" {
                     self.alertSearchHander()
                 }

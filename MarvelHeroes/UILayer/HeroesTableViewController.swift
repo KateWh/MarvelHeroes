@@ -102,12 +102,13 @@ class HeroesTableViewController: UITableViewController {
     }
 
     func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alert = UIAlertController(title: "Ops..", message: "Heroes not found!", preferredStyle: .alert )
         let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
         alert.addAction(alertAction)
         alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
+        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -164,37 +165,40 @@ class HeroesTableViewController: UITableViewController {
     
 }
 
-extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
 
+extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print("Я внутри selectedScopeButtonIndexDidChange")
         selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
         filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
     }
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
-        print("Внутри updateSearchResults")
         filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
     }
 
     // filter content by searching text
     private func filterContentForSearchText(_ searchText: String, scope: String) {
-        print("Внутри filterContentForSearchText")
-        print("scope: \(scope)")
-
         if scope == "In Phone" {
-            print("Внутри In Phone")
             filteredHeroes = marvelHeroesViewModel.allHeroesData.filter({(hero: Hero) -> Bool in
                 return hero.name.lowercased().contains(searchText.lowercased())
             })
         } else if scope == "In Web" {
-            print("Внутри In Web")
+            // start spinner inside searchBarTextField
+            if searchController.searchBar.textField!.text != "" {
+                searchController.searchBar.isLoading = true
+                searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.5859692693, green: 0.04976465553, blue: 0.05334877968, alpha: 1)
+            } else {
+                searchController.searchBar.isLoading = false
+            }
+            // search hero in web
             marvelHeroesViewModel.getSearchHero(heroName: searchText) { results in
                 if results != nil {
                     self.filteredHeroes = results!
                     self.tableView.reloadData()
+                    self.searchController.searchBar.isLoading = false 
                 } else if !self.filteredHeroes.isEmpty && searchText != "" {
                     self.alertSearchHander()
                 }
@@ -203,4 +207,38 @@ extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegat
 
         tableView.reloadData()
     }
+}
+
+extension UISearchBar {
+    public var textField: UITextField? {
+        let subViews = subviews.flatMap { $0.subviews }
+        guard let textField = (subViews.filter { $0 is UITextField }).first as? UITextField else {
+            return nil
+        }
+        return textField
+    }
+    
+    public var activityIndicator: UIActivityIndicatorView? {
+        return textField?.leftView?.subviews.compactMap{ $0 as? UIActivityIndicatorView }.first
+    }
+    
+    var isLoading: Bool {
+        get {
+            return activityIndicator != nil
+        } set {
+            if newValue {
+                if activityIndicator == nil {
+                    let newActivityIndicator = UIActivityIndicatorView(style: .white)
+                    newActivityIndicator.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
+                    newActivityIndicator.startAnimating()
+                    textField?.leftView?.addSubview(newActivityIndicator)
+                    let leftViewSize = textField?.leftView?.frame.size ?? CGSize.zero
+                    newActivityIndicator.center = CGPoint(x: leftViewSize.width/2, y: leftViewSize.height/2)
+                }
+            } else {
+                activityIndicator?.removeFromSuperview()
+            }
+        }
+    }
+    
 }

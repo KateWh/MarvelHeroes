@@ -101,12 +101,13 @@ class CreatorsTableViewController: UITableViewController {
     }
 
     func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Hero not found!", preferredStyle: .alert )
+        let alert = UIAlertController(title: "Ops..", message: "Creators not found!", preferredStyle: .alert )
         let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
         alert.addAction(alertAction)
         alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
+        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -162,8 +163,8 @@ class CreatorsTableViewController: UITableViewController {
     }
 }
 
-extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
 
+extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
@@ -172,6 +173,7 @@ extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDeleg
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
+        // filtering inputed searching text
         filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
     }
 
@@ -182,10 +184,20 @@ extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDeleg
                 return creators.fullName.lowercased().contains(searchText.lowercased())
             })
         } else if scope == "In Web" {
+            // start spinner inside searchBarTextField
+            if searchController.searchBar.textField!.text != "" {
+                searchController.searchBar.isLoading = true
+                searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.005948389415, green: 0.1200798824, blue: 0.001267887303, alpha: 1)
+            } else {
+                searchController.searchBar.isLoading = false
+            }
+            // search creators in web
             marvelCreatorsViewModel.getSearchCreators(heroName: searchText) { results in
                 if results != nil {
                     self.filteredCreators = results!
                     self.tableView.reloadData()
+                    self.searchController.searchBar.isLoading = false
                 } else if !self.filteredCreators.isEmpty && searchText != "" {
                     self.alertSearchHander()
                 }
@@ -194,15 +206,4 @@ extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDeleg
 
         tableView.reloadData()
     }
-}
-
-extension UISearchBar {
-    var textField: UITextField {
-        guard let txtField = self.value(forKey: "searchField") as? UITextField else {
-            assertionFailure()
-            return UITextField()
-        }
-        return txtField
-    }
-
 }
