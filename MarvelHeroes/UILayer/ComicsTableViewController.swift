@@ -48,26 +48,18 @@ class ComicsTableViewController: UITableViewController {
         searchController.searchBar.delegate = self
     }
 
-    // cet up the search controller
+    // Set up the search controller
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Comics"
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)]
-        let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
-        textFieldInsideSearchBarLabel?.textColor = .black
-
-        searchController.searchBar.textField.addTarget(self, action: #selector(goToWeb), for: UIControl.Event.primaryActionTriggered)
+        searchController.searchBar.tintColor = #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)]
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
 
-    // selector of search controller
-    @objc func goToWeb() {
-        print("WEB")
-    }
-
-    // pagination spiner func
+    // pagination spinner func
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
@@ -136,7 +128,6 @@ class ComicsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ComicsTableViewCell
-        //cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
 
         if isFiltering {
             cell.updateCell(withResults: filteredComics[indexPath.row])

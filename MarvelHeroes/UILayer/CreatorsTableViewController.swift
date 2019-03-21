@@ -25,7 +25,6 @@ class CreatorsTableViewController: UITableViewController {
     }
 
     override func viewDidLoad() {
-
         super.viewDidLoad()
         // Call Search Controller
         setupSearchController()
@@ -49,26 +48,18 @@ class CreatorsTableViewController: UITableViewController {
         searchController.searchBar.delegate = self
     }
 
-    // cet up the search controller
+    // Set up the search controller
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search Creators"
+        searchController.searchBar.tintColor = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
-        let textFieldInsideSearchBarLabel = searchController.searchBar.textField.value(forKey: "placeholderLabel") as? UILabel
-        textFieldInsideSearchBarLabel?.textColor = .black
-
-        searchController.searchBar.textField.addTarget(self, action: #selector(goToWeb), for: UIControl.Event.primaryActionTriggered)
         navigationItem.searchController = searchController
         definesPresentationContext = true
     }
 
-    // selector of search controller
-    @objc func goToWeb() {
-        print("WEB")
-    }
-
-    // pagination spiner func
+    // pagination spinner func
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
         spinner.stopAnimating()
@@ -137,7 +128,6 @@ class CreatorsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CreatorsTableViewCell
-        //cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
 
         if isFiltering {
             cell.updateCell(withResults: filteredCreators[indexPath.row])
