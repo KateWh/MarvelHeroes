@@ -16,7 +16,19 @@ class HeroesViewModel {
     var allHeroesData: [Hero] = []
     var limitHero = 0
     var offsetHero = 0
-    
+
+    let searchController = UISearchController(searchResultsController: nil)
+    var filteredHeroes = [Hero]()
+    var selectedScopeState = "In Phone"
+    var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
+
+
     // get heroes data
     func updateHeroes(complitionHandler: @escaping (Error?) -> Void) {
         CharatersCommunicator.getHeroes(withLimit: 20, withOffset: offsetHero) { (result) in
@@ -56,17 +68,37 @@ class HeroesViewModel {
         return heroInfoLink
     }
 
-// get seaching hero
-    func getSearchHero(heroName name: String, completionHandler: @escaping([Hero]?) -> Void) {
-        CharatersCommunicator.getSearchHero(withName: name) { result in
-            switch result {
-            case .success(let allAboutHero):
-            completionHandler(allAboutHero.data.results)
-            case .failure(_):
-                completionHandler(nil)
+
+    // filter content by searching text
+    func filterContentForSearchText(_ searchText: String, scope: String, complitionHandler: @escaping (Error?) -> Void) {
+        if scope == "In Phone" {
+            filteredHeroes = self.allHeroesData.filter({(hero: Hero) -> Bool in
+                return hero.name.lowercased().contains(searchText.lowercased())
+            })
+            complitionHandler(nil)
+        } else if scope == "In Web", searchText != "" {
+
+            // start spinner inside searchBarTextField
+                searchController.searchBar.isLoading = true
+                searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.5859692693, green: 0.04976465553, blue: 0.05334877968, alpha: 1)
+
+            // search hero in web
+            CharatersCommunicator.getSearchHero(withName: searchText) { result in
+                switch result {
+                case .success(let filteredHeroes):
+                   self.filteredHeroes = filteredHeroes.data.results
+                   complitionHandler(nil)
+                case .failure(let error):
+                    complitionHandler(error)
+                }
             }
+
+        } else {
+            self.searchController.searchBar.isLoading = false
         }
+
     }
-    
+
 }
 

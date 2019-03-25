@@ -11,18 +11,9 @@ import UIKit
 class CreatorsTableViewController: UITableViewController {
 
     let marvelCreatorsViewModel = CreatorsViewModel()
-    private let searchController = UISearchController(searchResultsController: nil)
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-    private var filteredCreators = [Creator]()
-    private var selectedScopeState = "In Phone"
-    private var searchBarIsEmpty: Bool {
-        guard let text = searchController.searchBar.text else { return false }
-        return text.isEmpty
-    }
-    private var isFiltering: Bool {
-        return searchController.isActive && !searchBarIsEmpty
-    }
+  
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +27,7 @@ class CreatorsTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
             }
         }
 
@@ -44,18 +35,18 @@ class CreatorsTableViewController: UITableViewController {
         addRefreshControl()
 
         // Setup the Scope Bar
-        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
-        searchController.searchBar.delegate = self
+        marvelCreatorsViewModel.searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        marvelCreatorsViewModel.searchController.searchBar.delegate = self
     }
 
     // Set up the search controller
     func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Creators"
-        searchController.searchBar.tintColor = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
+        marvelCreatorsViewModel.searchController.searchResultsUpdater = self
+        marvelCreatorsViewModel.searchController.obscuresBackgroundDuringPresentation = false
+        marvelCreatorsViewModel.searchController.searchBar.placeholder = "Search Creators"
+        marvelCreatorsViewModel.searchController.searchBar.tintColor = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
-        navigationItem.searchController = searchController
+        navigationItem.searchController = marvelCreatorsViewModel.searchController
         definesPresentationContext = true
     }
 
@@ -84,30 +75,20 @@ class CreatorsTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                 self.tableView.reloadData()
             }
             self.refreshControl?.endRefreshing()
         }
     }
 
-    func alertHandler() {
-        let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
+    func alertHandler(withTitle title: String, withMassage massage: String, titleForActionButton titleOfButton: String, withColor color: UIColor) {
+        let alert = UIAlertController(title: title, message: massage, preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: titleOfButton, style: .default, handler: nil)
         alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        alert.view.backgroundColor = color
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
-    }
-
-    func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Creators not found!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
-        alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
-        alert.view.layer.cornerRadius = 10
-        self.present(alert, animated: true, completion: nil)
-        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,8 +98,8 @@ class CreatorsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-            return filteredCreators.count
+        if marvelCreatorsViewModel.isFiltering {
+            return marvelCreatorsViewModel.filteredCreators.count
         }
         return marvelCreatorsViewModel.allCreatorsData.count
     }
@@ -130,8 +111,8 @@ class CreatorsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CreatorsTableViewCell
 
-        if isFiltering {
-            cell.updateCell(withResults: filteredCreators[indexPath.row])
+        if marvelCreatorsViewModel.isFiltering {
+            cell.updateCell(withResults: marvelCreatorsViewModel.filteredCreators[indexPath.row])
         } else {
             cell.updateCell(withResults: marvelCreatorsViewModel.allCreatorsData[indexPath.row])
         }
@@ -149,7 +130,7 @@ class CreatorsTableViewController: UITableViewController {
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
-                    self.alertHandler()
+                    self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                     return
                 }
                 self.tableView.reloadData()
@@ -165,45 +146,27 @@ class CreatorsTableViewController: UITableViewController {
 
 
 extension CreatorsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
-        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+        self.marvelCreatorsViewModel.selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        updateSearchResults(for: marvelCreatorsViewModel.searchController)
     }
+
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
-        // filtering inputed searching text
-        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
-    }
-
-    // filter content by searching text
-    private func filterContentForSearchText(_ searchText: String, scope: String) {
-        if scope == "In Phone" {
-            filteredCreators = marvelCreatorsViewModel.allCreatorsData.filter({(creators: Creator) -> Bool in
-                return creators.fullName.lowercased().contains(searchText.lowercased())
-            })
-        } else if scope == "In Web" {
-            // start spinner inside searchBarTextField
-            if searchController.searchBar.textField!.text != "" {
-                searchController.searchBar.isLoading = true
-                searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.005948389415, green: 0.1200798824, blue: 0.001267887303, alpha: 1)
-            } else {
+        marvelCreatorsViewModel.filterContentForSearchText(searchController.searchBar.text!, scope: marvelCreatorsViewModel.selectedScopeState) {
+            error in
+            if error == nil {
+                self.tableView.reloadData()
                 searchController.searchBar.isLoading = false
-            }
-            // search creators in web
-            marvelCreatorsViewModel.getSearchCreators(heroName: searchText) { results in
-                if results != nil {
-                    self.filteredCreators = results!
-                    self.tableView.reloadData()
-                    self.searchController.searchBar.isLoading = false
-                } else if !self.filteredCreators.isEmpty && searchText != "" {
-                    self.alertSearchHander()
-                }
+            } else {
+                self.alertHandler(withTitle: "Ops..", withMassage: "Heroes not found!", titleForActionButton: "Try again!", withColor: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1))
+                self.marvelCreatorsViewModel.searchController.searchBar.isLoading = false
             }
         }
-
-        tableView.reloadData()
     }
+
+
 }

@@ -14,7 +14,17 @@ class CreatorsViewModel {
     var allCreatorsData: [Creator] = []
     var limitCreators = 0
     var offsetCreators = 0
-    
+
+    let searchController = UISearchController(searchResultsController: nil)
+    var filteredCreators = [Creator]()
+    var selectedScopeState = "In Phone"
+    var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else { return false }
+        return text.isEmpty
+    }
+    var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
     // get creators data
     func updateCreators(complitionHandler: @escaping (Error?) -> Void) {
         CreatorsCommunicator.getCreators(withLimit: 20, withOffset: offsetCreators) { (result) in
@@ -51,37 +61,38 @@ class CreatorsViewModel {
         return creatorInfoLink
     }
 
-    // get seaching hero
-    func getSearchCreators(heroName name: String, completionHandler: @escaping([Creator]?) -> Void) {
-        CreatorsCommunicator.getSearchCreators(withName: name) { result in
-            switch result {
-            case .success(let allAboutCreator):
-                completionHandler(allAboutCreator.data.results)
-            case .failure(_):
-                completionHandler(nil)
+
+    // filter content by searching text
+    func filterContentForSearchText(_ searchText: String, scope: String, complitionHandler: @escaping (Error?) -> Void) {
+        if scope == "In Phone" {
+            filteredCreators = self.allCreatorsData.filter({(creators: Creator) -> Bool in
+                return creators.fullName.lowercased().contains(searchText.lowercased())
+            })
+            complitionHandler(nil)
+        } else if scope == "In Web", searchText != "" {
+
+            // start spinner inside searchBarTextField
+            searchController.searchBar.isLoading = true
+            searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 0.9988828301, green: 0.9734352231, blue: 0.06155067682, alpha: 1)
+            searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.005948389415, green: 0.1200798824, blue: 0.001267887303, alpha: 1)
+
+            // search hero in web
+            CreatorsCommunicator.getSearchCreators(withName: searchText) { result in
+                switch result {
+                case .success(let filteredCreators):
+                    self.filteredCreators = filteredCreators.data.results
+                    complitionHandler(nil)
+                case .failure(let error):
+                    complitionHandler(error)
+                }
             }
+
+        } else {
+            self.searchController.searchBar.isLoading = false
         }
+
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

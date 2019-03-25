@@ -11,19 +11,9 @@ import UIKit
 class ComicsTableViewController: UITableViewController {
 
     let marvelComicsViewModel = ComicsViewModel()
-    private let searchController = UISearchController(searchResultsController: nil)
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-    private var filteredComics = [Comics]()
-    private var selectedScopeState = "In Phone"
-    private var searchBarIsEmpty: Bool {
-        guard let text = searchController.searchBar.text else { return false }
-        return text.isEmpty
-    }
-    private var isFiltering: Bool {
-        return searchController.isActive && !searchBarIsEmpty
-    }
-
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         // Call Search Controller
@@ -36,7 +26,7 @@ class ComicsTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
             }
         }
 
@@ -44,18 +34,18 @@ class ComicsTableViewController: UITableViewController {
         addRefreshControl()
 
         // Setup the Scope Bar
-        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
-        searchController.searchBar.delegate = self
+        marvelComicsViewModel.searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        marvelComicsViewModel.searchController.searchBar.delegate = self
     }
 
     // Set up the search controller
     func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Comics"
-        searchController.searchBar.tintColor = #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)
+        marvelComicsViewModel.searchController.searchResultsUpdater = self
+        marvelComicsViewModel.searchController.obscuresBackgroundDuringPresentation = false
+        marvelComicsViewModel.searchController.searchBar.placeholder = "Search Comics"
+        marvelComicsViewModel.searchController.searchBar.tintColor = #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)]
-        navigationItem.searchController = searchController
+        navigationItem.searchController = marvelComicsViewModel.searchController
         definesPresentationContext = true
     }
 
@@ -84,30 +74,20 @@ class ComicsTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                 self.tableView.reloadData()
             }
             self.refreshControl?.endRefreshing()
         }
     }
 
-    func alertHandler() {
-        let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
+    func alertHandler(withTitle title: String, withMassage massage: String, titleForActionButton titleOfButton: String, withColor color: UIColor) {
+        let alert = UIAlertController(title: title, message: massage, preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: titleOfButton, style: .default, handler: nil)
         alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        alert.view.backgroundColor = color
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
-    }
-
-    func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Comics not found!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
-        alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
-        alert.view.layer.cornerRadius = 10
-        self.present(alert, animated: true, completion: nil)
-        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,8 +97,8 @@ class ComicsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-            return filteredComics.count
+        if marvelComicsViewModel.isFiltering {
+            return marvelComicsViewModel.filteredComics.count
         }
         return marvelComicsViewModel.allComicsData.count
     }
@@ -130,8 +110,8 @@ class ComicsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! ComicsTableViewCell
 
-        if isFiltering {
-            cell.updateCell(withResults: filteredComics[indexPath.row])
+        if marvelComicsViewModel.isFiltering {
+            cell.updateCell(withResults: marvelComicsViewModel.filteredComics[indexPath.row])
         } else {
             cell.updateCell(withResults: marvelComicsViewModel.allComicsData[indexPath.row])
         }
@@ -149,7 +129,7 @@ class ComicsTableViewController: UITableViewController {
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
-                    self.alertHandler()
+                    self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                     return
                 }
                 self.tableView.reloadData()
@@ -165,50 +145,27 @@ class ComicsTableViewController: UITableViewController {
 
 
 extension ComicsTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        print("Я внутри selectedScopeButtonIndexDidChange")
-        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
-        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+        self.marvelComicsViewModel.selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        updateSearchResults(for: marvelComicsViewModel.searchController)
     }
+
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
-        print("Внутри updateSearchResults")
-        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
-    }
-
-    // filter content by searching text
-    private func filterContentForSearchText(_ searchText: String, scope: String) {
-        print("Внутри filterContentForSearchText")
-        print("scope: \(scope)")
-
-        if scope == "In Phone" {
-            print("Внутри In Phone")
-            filteredComics = marvelComicsViewModel.allComicsData.filter({(comics: Comics) -> Bool in
-                return comics.title.lowercased().contains(searchText.lowercased())
-            })
-        } else if scope == "In Web" {
-            // start spinner inside searchBarTextField
-            if searchController.searchBar.textField!.text != "" {
-                searchController.searchBar.isLoading = true
-                searchController.searchBar.activityIndicator?.color = #colorLiteral(red: 0.1126269036, green: 0.07627656838, blue: 0.01553396923, alpha: 1)
-                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.9310250282, green: 0.8915370107, blue: 0.03296109289, alpha: 1)
-            } else {
+        marvelComicsViewModel.filterContentForSearchText(searchController.searchBar.text!, scope: marvelComicsViewModel.selectedScopeState) {
+            error in
+            if error == nil {
+                self.tableView.reloadData()
                 searchController.searchBar.isLoading = false
-            }
-            // search comics in web
-            marvelComicsViewModel.getSearchComics(heroName: searchText) { results in
-                if results != nil {
-                    self.filteredComics = results!
-                    self.tableView.reloadData()
-                    self.searchController.searchBar.isLoading = false
-                } else if !self.filteredComics.isEmpty && searchText != "" {
-                    self.alertSearchHander()
-                }
+            } else {
+                self.alertHandler(withTitle: "Ops..", withMassage: "Heroes not found!", titleForActionButton: "Try again!", withColor: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1))
+                self.marvelComicsViewModel.searchController.searchBar.isLoading = false
             }
         }
-
-        tableView.reloadData()
     }
+
+
 }

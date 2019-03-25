@@ -11,19 +11,11 @@ import SDWebImage
 
 class HeroesTableViewController: UITableViewController {
 
-    private let marvelHeroesViewModel = HeroesViewModel()
-    private let searchController = UISearchController(searchResultsController: nil)
-    private var spinner = UIActivityIndicatorView()
-    private var paginationFlag = true
-    private var filteredHeroes = [Hero]()
-    private var selectedScopeState = "In Phone"
-    private var searchBarIsEmpty: Bool {
-        guard let text = searchController.searchBar.text else { return false }
-        return text.isEmpty
-    }
-    private var isFiltering: Bool {
-        return searchController.isActive && !searchBarIsEmpty
-    }
+    let marvelHeroesViewModel = HeroesViewModel()
+    
+    var spinner = UIActivityIndicatorView()
+    var paginationFlag = true
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +29,7 @@ class HeroesTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
             }
         }
         
@@ -45,18 +37,18 @@ class HeroesTableViewController: UITableViewController {
         addRefreshControl()
         
         // Setup the Scope Bar
-        searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
-        searchController.searchBar.delegate = self
+        marvelHeroesViewModel.searchController.searchBar.scopeButtonTitles = ["In Phone", "In Web"]
+        marvelHeroesViewModel.searchController.searchBar.delegate = self
     }
 
     // Set up the search controller
     func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search Heroes"
-        searchController.searchBar.tintColor = UIColor(cgColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1))
+        marvelHeroesViewModel.searchController.searchResultsUpdater = self
+        marvelHeroesViewModel.searchController.obscuresBackgroundDuringPresentation = false
+        marvelHeroesViewModel.searchController.searchBar.placeholder = "Search Heroes"
+        marvelHeroesViewModel.searchController.searchBar.tintColor = UIColor(cgColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1))
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
-        navigationItem.searchController = searchController
+        navigationItem.searchController = marvelHeroesViewModel.searchController
         definesPresentationContext = true
     }
     
@@ -85,30 +77,20 @@ class HeroesTableViewController: UITableViewController {
             if error == nil {
                 self.tableView.reloadData()
             } else {
-                self.alertHandler()
+                self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                 self.tableView.reloadData()
             }
             self.refreshControl?.endRefreshing()
         }
     }
 
-    func alertHandler() {
-        let alert = UIAlertController(title: "Attention!", message: "Data not resieved!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Understand", style: .default, handler: nil)
+    func alertHandler(withTitle title: String, withMassage massage: String, titleForActionButton titleOfButton: String, withColor color: UIColor) {
+        let alert = UIAlertController(title: title, message: massage, preferredStyle: .alert )
+        let alertAction = UIAlertAction(title: titleOfButton, style: .default, handler: nil)
         alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+        alert.view.backgroundColor = color
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
-    }
-
-    func alertSearchHander() {
-        let alert = UIAlertController(title: "Ops..", message: "Heroes not found!", preferredStyle: .alert )
-        let alertAction = UIAlertAction(title: "Try Again", style: .default, handler: nil)
-        alert.addAction(alertAction)
-        alert.view.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
-        alert.view.layer.cornerRadius = 10
-        self.present(alert, animated: true, completion: nil)
-        searchController.searchBar.isLoading = false
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -118,8 +100,8 @@ class HeroesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if isFiltering {
-            return filteredHeroes.count
+        if marvelHeroesViewModel.isFiltering {
+            return marvelHeroesViewModel.filteredHeroes.count
         }
         return marvelHeroesViewModel.allHeroesData.count
     }
@@ -131,8 +113,8 @@ class HeroesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! HeroTableViewCell
 
-        if isFiltering {
-            cell.updateCell(withResults: filteredHeroes[indexPath.row])
+        if marvelHeroesViewModel.isFiltering {
+            cell.updateCell(withResults: marvelHeroesViewModel.filteredHeroes[indexPath.row])
         } else {
             cell.updateCell(withResults: marvelHeroesViewModel.allHeroesData[indexPath.row])
         }
@@ -150,7 +132,7 @@ class HeroesTableViewController: UITableViewController {
                 self.spinner.stopAnimating()
                 self.paginationFlag = true
                 guard error == nil else {
-                    self.alertHandler()
+                    self.alertHandler(withTitle: "Attention!", withMassage: "Data not resieved!", titleForActionButton: "Understand", withColor: #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1))
                     return
                 }
                 self.tableView.reloadData()
@@ -167,49 +149,34 @@ class HeroesTableViewController: UITableViewController {
 
 
 extension HeroesTableViewController: UISearchResultsUpdating, UISearchBarDelegate{
+
     // this method is called when the scopeBar has changed
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
-        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+        self.marvelHeroesViewModel.selectedScopeState = searchBar.scopeButtonTitles![selectedScope]
+        updateSearchResults(for: marvelHeroesViewModel.searchController)
     }
+
 
     // called when user input text to search field
     func updateSearchResults(for searchController: UISearchController) {
-        filterContentForSearchText(searchController.searchBar.text!, scope: selectedScopeState)
-    }
-
-    // filter content by searching text
-    private func filterContentForSearchText(_ searchText: String, scope: String) {
-        if scope == "In Phone" {
-            filteredHeroes = marvelHeroesViewModel.allHeroesData.filter({(hero: Hero) -> Bool in
-                return hero.name.lowercased().contains(searchText.lowercased())
-            })
-        } else if scope == "In Web" {
-            // start spinner inside searchBarTextField
-            if searchController.searchBar.textField!.text != "" {
-                searchController.searchBar.isLoading = true
-                searchController.searchBar.activityIndicator!.color = #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)
-                searchController.searchBar.activityIndicator?.backgroundColor = #colorLiteral(red: 0.5859692693, green: 0.04976465553, blue: 0.05334877968, alpha: 1)
-            } else {
+        marvelHeroesViewModel.filterContentForSearchText(searchController.searchBar.text!, scope: marvelHeroesViewModel.selectedScopeState) {
+            error in
+            if error == nil {
                 searchController.searchBar.isLoading = false
-            }
-            // search hero in web
-            marvelHeroesViewModel.getSearchHero(heroName: searchText) { results in
-                if results != nil {
-                    self.filteredHeroes = results!
-                    self.tableView.reloadData()
-                    self.searchController.searchBar.isLoading = false 
-                } else if !self.filteredHeroes.isEmpty && searchText != "" {
-                    self.alertSearchHander()
-                }
+                 self.tableView.reloadData()
+            } else {
+                self.alertHandler(withTitle: "Ops..", withMassage: "Heroes not found!", titleForActionButton: "Try again!", withColor: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1))
+                self.marvelHeroesViewModel.searchController.searchBar.isLoading = false
             }
         }
-
-        tableView.reloadData()
     }
+
+    
 }
 
 extension UISearchBar {
+
+    // Access to textField
     public var textField: UITextField? {
         let subViews = subviews.flatMap { $0.subviews }
         guard let textField = (subViews.filter { $0 is UITextField }).first as? UITextField else {
@@ -217,16 +184,19 @@ extension UISearchBar {
         }
         return textField
     }
-    
+
+   //  Create activity indicator
     public var activityIndicator: UIActivityIndicatorView? {
         return textField?.leftView?.subviews.compactMap{ $0 as? UIActivityIndicatorView }.first
     }
-    
+
+    //  on/off activity indicator
     var isLoading: Bool {
         get {
             return activityIndicator != nil
         } set {
             if newValue {
+                 // Set up activity indicator
                 if activityIndicator == nil {
                     let newActivityIndicator = UIActivityIndicatorView(style: .white)
                     newActivityIndicator.transform = CGAffineTransform(scaleX: 0.7, y: 0.7)
