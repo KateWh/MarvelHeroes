@@ -6,5 +6,6 @@ target 'MarvelHeroes' do
   # Pods for MarvelHeroes
   pod 'SDWebImage'
   pod 'Alamofire'
+  pod 'FAPanels'
 
 end

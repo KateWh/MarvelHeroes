@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FAPanels
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        //let rootController = FAPanelController()
+        //window?.rootViewController = rootController
+        
+       /*
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let leftMenuVC: LeftMenuVC = mainStoryboard.instantiateViewController(withIdentifier: "LeftMenuVC") as! LeftMenuVC
+        let rightMenuVC: RightMenuVC = mainStoryboard.instantiateViewController(withIdentifier: "RightMenuVC") as! RightMenuVC
+        let centerVC: HeroesTableViewController = mainStoryboard.instantiateViewController(withIdentifier: "HeroesTVC") as! HeroesTableViewController
+        let centerNavVC = UINavigationController(rootViewController: centerVC)
+ 
+        //  Set the Panel controllers with just two lines of code
+        
+        //let rootController: FAPanelController = window?.rootViewController as! FAPanelController
+        //rootController.center(centerNavVC).left(leftMenuVC).right(rightMenuVC)
+ */
+        
         return true
     }
 

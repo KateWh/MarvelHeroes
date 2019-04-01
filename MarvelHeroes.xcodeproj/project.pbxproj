@@ -18,6 +18,11 @@
 		588266132239960E00A0FA93 /* RouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588266122239960E00A0FA93 /* RouterTests.swift */; };
 		58826617223D9ABA00A0FA93 /* ComicsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58826616223D9ABA00A0FA93 /* ComicsViewModelTests.swift */; };
 		58826619223D9C5F00A0FA93 /* CreatorsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58826618223D9C5F00A0FA93 /* CreatorsViewModelTests.swift */; };
+		58D975BA225267C1002B3EC8 /* PanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D975B9225267C0002B3EC8 /* PanelController.swift */; };
+		58F64F38224ABC5A00DEFB80 /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F64F37224ABC5A00DEFB80 /* ContainerViewController.swift */; };
+		58F64F3A224ABC7300DEFB80 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F64F39224ABC7300DEFB80 /* MenuViewController.swift */; };
+		58F64F3F224EC20A00DEFB80 /* LeftMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F64F3E224EC20A00DEFB80 /* LeftMenuVC.swift */; };
+		58F64F41224EC22100DEFB80 /* RightMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F64F40224EC22100DEFB80 /* RightMenuVC.swift */; };
 		BE59C000173BC9EBC7F6D461 /* Pods_MarvelHeroes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8302C950C920BD8DE02C7F0A /* Pods_MarvelHeroes.framework */; };
 		C6092BDB223070B000805432 /* ModelOfComics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6092BDA223070B000805432 /* ModelOfComics.swift */; };
 		C6092BDD223070CA00805432 /* ModelOfCreators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6092BDC223070CA00805432 /* ModelOfCreators.swift */; };
@@ -62,6 +67,11 @@
 		58826616223D9ABA00A0FA93 /* ComicsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicsViewModelTests.swift; sourceTree = "<group>"; };
 		58826618223D9C5F00A0FA93 /* CreatorsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorsViewModelTests.swift; sourceTree = "<group>"; };
 		58CC18AC2203A2EA000590CE /* Woman.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Woman.jpg; sourceTree = "<group>"; };
+		58D975B9225267C0002B3EC8 /* PanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanelController.swift; sourceTree = "<group>"; };
+		58F64F37224ABC5A00DEFB80 /* ContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
+		58F64F39224ABC7300DEFB80 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		58F64F3E224EC20A00DEFB80 /* LeftMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMenuVC.swift; sourceTree = "<group>"; };
+		58F64F40224EC22100DEFB80 /* RightMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightMenuVC.swift; sourceTree = "<group>"; };
 		8302C950C920BD8DE02C7F0A /* Pods_MarvelHeroes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarvelHeroes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF58D5EC175C3C24A48855A /* Pods-MarvelHeroes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarvelHeroes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MarvelHeroes/Pods-MarvelHeroes.debug.xcconfig"; sourceTree = "<group>"; };
 		C6092BDA223070B000805432 /* ModelOfComics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelOfComics.swift; sourceTree = "<group>"; };
@@ -129,6 +139,16 @@
 			path = "Support files";
 			sourceTree = "<group>";
 		};
+		58F64F3B224EBEDF00DEFB80 /* FAPanelController */ = {
+			isa = PBXGroup;
+			children = (
+				58D975B9225267C0002B3EC8 /* PanelController.swift */,
+				58F64F3E224EC20A00DEFB80 /* LeftMenuVC.swift */,
+				58F64F40224EC22100DEFB80 /* RightMenuVC.swift */,
+			);
+			path = FAPanelController;
+			sourceTree = "<group>";
+		};
 		7589586AEFDDD5DF22B5A6E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +189,7 @@
 		C661CA882201E4C700D939DB /* MarvelHeroes */ = {
 			isa = PBXGroup;
 			children = (
+				58F64F3B224EBEDF00DEFB80 /* FAPanelController */,
 				FCCFB00D2214A87D001013DE /* UILayer */,
 				FCCFB0132214A87E001013DE /* ViewModelLayer */,
 				C6F3499B2214B4E000549296 /* Communicators */,
@@ -211,6 +232,8 @@
 				FCCFB0102214A87E001013DE /* HeroTableViewCell.swift */,
 				C6F13EB422307CD60030F08E /* ComicsTableViewCell.swift */,
 				C6F13EB622307E520030F08E /* CreatorsTableViewCell.swift */,
+				58F64F37224ABC5A00DEFB80 /* ContainerViewController.swift */,
+				58F64F39224ABC7300DEFB80 /* MenuViewController.swift */,
 			);
 			path = UILayer;
 			sourceTree = "<group>";
@@ -364,6 +387,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MarvelHeroes/Pods-MarvelHeroes-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/FAPanels/FAPanels.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -371,6 +395,7 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FAPanels.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -400,7 +425,9 @@
 				C661CA8A2201E4C700D939DB /* AppDelegate.swift in Sources */,
 				FCCFB0172214A87E001013DE /* HeroesWebVC.swift in Sources */,
 				C6F13EBB2230855B0030F08E /* ComicsTableViewController.swift in Sources */,
+				58D975BA225267C1002B3EC8 /* PanelController.swift in Sources */,
 				584C757B2231AA3D0097EC10 /* CreatorsViewModel.swift in Sources */,
+				58F64F41224EC22100DEFB80 /* RightMenuVC.swift in Sources */,
 				584C758722330AFB0097EC10 /* HeroesTableViewController.swift in Sources */,
 				584C757D2231AA4E0097EC10 /* ComicsViewModel.swift in Sources */,
 				584C757F2231B4AA0097EC10 /* ComicsCommunicator.swift in Sources */,
@@ -411,8 +438,11 @@
 				C6F13EBD223085840030F08E /* CreatorsTableViewController.swift in Sources */,
 				C6092BDB223070B000805432 /* ModelOfComics.swift in Sources */,
 				584C758322330A7A0097EC10 /* ComicsWebVC.swift in Sources */,
+				58F64F3A224ABC7300DEFB80 /* MenuViewController.swift in Sources */,
 				FCCFB0192214A87E001013DE /* Router.swift in Sources */,
+				58F64F38224ABC5A00DEFB80 /* ContainerViewController.swift in Sources */,
 				FCCFB0182214A87E001013DE /* HeroTableViewCell.swift in Sources */,
+				58F64F3F224EC20A00DEFB80 /* LeftMenuVC.swift in Sources */,
 				C6F13EB522307CD60030F08E /* ComicsTableViewCell.swift in Sources */,
 				FCCFB01A2214A87E001013DE /* HeroesViewModel.swift in Sources */,
 				584C75812231B4BF0097EC10 /* CreatorsCommunicator.swift in Sources */,

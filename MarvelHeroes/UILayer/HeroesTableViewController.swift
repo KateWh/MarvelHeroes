@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import FAPanels
 
 class HeroesTableViewController: UITableViewController {
 
@@ -15,7 +16,6 @@ class HeroesTableViewController: UITableViewController {
     
     var spinner = UIActivityIndicatorView()
     var paginationFlag = true
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +47,12 @@ class HeroesTableViewController: UITableViewController {
         marvelHeroesViewModel.searchController.obscuresBackgroundDuringPresentation = false
         marvelHeroesViewModel.searchController.searchBar.placeholder = "Search Heroes"
         marvelHeroesViewModel.searchController.searchBar.tintColor = UIColor(cgColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1))
+        marvelHeroesViewModel.searchController.searchBar.backgroundColor = #colorLiteral(red: 0.8240086436, green: 0.08994806558, blue: 0.1957161427, alpha: 1)
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 1, green: 0.9729014094, blue: 0.05995802723, alpha: 1)]
         navigationItem.searchController = marvelHeroesViewModel.searchController
         definesPresentationContext = true
     }
-    
+ 
     // pagination spinner func 
     func createSpinner() {
         spinner = UIActivityIndicatorView(style: .whiteLarge)
@@ -92,7 +93,7 @@ class HeroesTableViewController: UITableViewController {
         alert.view.layer.cornerRadius = 10
         self.present(alert, animated: true, completion: nil)
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let heroInfoLink = marvelHeroesViewModel.getHeroInfoLink(forIndexPath: indexPath)
         // go to hero info web page

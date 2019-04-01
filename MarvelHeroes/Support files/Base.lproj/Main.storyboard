@@ -10,14 +10,60 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Left MenuVC-->
+        <scene sceneID="ZUb-A9-Mzr">
+            <objects>
+                <viewController storyboardIdentifier="LeftMenuVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HxS-hf-fI6" customClass="LeftMenuVC" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AgR-yv-6Zl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hello" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Di-2v-MT3">
+                                <rect key="frame" x="16" y="98" width="65" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.76188968840000004" green="0.83057216290000002" blue="0.84652601520000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.095866085279999999" green="0.4845732868" blue="0.0081341485640000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="85C-1a-vgK"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fsk-5r-SKT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1036" y="-1357.8710644677662"/>
+        </scene>
+        <!--Her-->
+        <scene sceneID="ckv-mE-qhC">
+            <objects>
+                <viewController storyboardIdentifier="panelController" id="btC-u0-tiL" customClass="PanelController" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nQp-G5-0YA">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.71672747459999997" green="0.033072259479999998" blue="0.17510086520000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <viewLayoutGuide key="safeArea" id="sL6-8W-WlV"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Her" id="KpS-QD-cl8"/>
+                    <connections>
+                        <segue destination="HxS-hf-fI6" kind="show" identifier="leftVCSegue" id="jfO-C3-iX5"/>
+                        <segue destination="HA4-gX-jeb" kind="show" identifier="heroesTVCSegue" id="msc-gq-ZMl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R7k-mW-mwv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1046" y="-656"/>
+        </scene>
         <!--Heroes-->
         <scene sceneID="pGh-Cs-KhE">
             <objects>
-                <tableViewController id="HA4-gX-jeb" customClass="HeroesTableViewController" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="HeroesTVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="HA4-gX-jeb" customClass="HeroesTableViewController" customModule="MarvelHeroes" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="cV9-Cw-cY3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.82400864360000003" green="0.08994806558" blue="0.19571614270000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="sectionIndexBackgroundColor" red="0.71672747459999997" green="0.033072259479999998" blue="0.17510086520000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="279" id="cCq-wU-3Gs" customClass="HeroTableViewCell" customModule="MarvelHeroes" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="279"/>
@@ -285,7 +331,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lJP-Ez-LXT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1042" y="-655"/>
+            <point key="canvasLocation" x="1745" y="-656"/>
         </scene>
         <!--Heroes WebVC-->
         <scene sceneID="iOv-pY-dWV">
@@ -329,7 +375,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Ab-w1-Vaf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1751" y="-655"/>
+            <point key="canvasLocation" x="2452" y="-656"/>
         </scene>
         <!--Characters-->
         <scene sceneID="CDY-RA-4O2">
@@ -342,7 +388,7 @@
                         <color key="barTintColor" red="0.82400864362716675" green="0.089948065578937531" blue="0.19571614265441895" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="HA4-gX-jeb" kind="relationship" relationship="rootViewController" id="Nro-fc-Hzq"/>
+                        <segue destination="btC-u0-tiL" kind="relationship" relationship="rootViewController" id="LS1-6K-WZT"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uq0-ci-Cys" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1050,7 +1096,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="n55-iv-TkM" kind="relationship" relationship="rootViewController" id="gof-8S-9xa"/>
+                        <segue destination="n55-iv-TkM" kind="relationship" relationship="rootViewController" id="gGI-uH-oDW"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sNa-oV-qC9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1070,7 +1116,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="bcj-JR-AKA" kind="relationship" relationship="rootViewController" id="aXk-N2-7Ky"/>
+                        <segue destination="bcj-JR-AKA" kind="relationship" relationship="rootViewController" id="2Ma-lN-gGe"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Ei-7x-Ep1" userLabel="First Responder" sceneMemberID="firstResponder"/>
